@@ -4,7 +4,7 @@ var label = [];
 var canvasl = [];
 var ctxl = [];
 var cs = 100;
-var bgcolor = "pink"
+var bgcolor = "#ffaab5"
 var ccolor = "#fff4aa"
 
 // SCREEN SIZE
@@ -175,13 +175,27 @@ fillc.addEventListener("change",changecircle);
 piec.addEventListener("change",changecircle);
 outc.addEventListener("change",changecircle);
 
+Bgc = document.createElement("input");
+Ccc = document.createElement("input");
+Bgc.setAttribute("type","color");
+Ccc.setAttribute("type","color");
+//Bgc.style.display = "block";
+Ccc.style.cssFloat = "right";
+Bgc.style.cssFloat = "right";
+Ccc.value = ccolor;
+Bgc.value = bgcolor;
+cntrls.appendChild(Bgc);
+cntrls.appendChild(Ccc);
 
+Bgc.addEventListener("input",changecolor);
+Ccc.addEventListener("change",changecolor);
 
 
 function changecircle(){
     var selection = document.querySelector('input[name="shape"]:checked').value;
     ctxl[circle].clearRect(0,0,cs, cs);
     ctxl[circle].strokeStyle=ccolor;
+    ctxl[circle].lineWidth = 5;
     ctxl[circle].fillStyle = ccolor;
     ctxl[circle].beginPath(); 
     Angle = controls[anglec].value*Math.PI/180;
@@ -202,9 +216,9 @@ function changecircle(){
         else{
             ctxl[circle].fillStyle = ccolor;
         }
-        A = Math.ceil(controls[radiusc].value)
+        A = Math.ceil(controls[radiusc].value);
         Y = Math. round(Math.sin(Angle)*controls[radiusc].value) ;
-        X = Math. round(Math.cos(Angle)*controls[radiusc].value) ;
+        X = Math. round(Math.cos(Angle)*controls[radiusc].value);
         ctxl[circle].beginPath();
         ctxl[circle].moveTo((cs/2)+A, cs/2);
         ctxl[circle].lineTo(cs/2,cs/2);
@@ -217,6 +231,13 @@ function changecircle(){
     
 }
 
+function changecolor() {
+    bgcolor = Bgc.value;
+    ccolor = Ccc.value;
+    changecircle();
+    ctxl[bg].fillStyle = bgcolor;
+    ctxl[bg].fillRect(0, 0,cs,cs);
+}
 
 
 
