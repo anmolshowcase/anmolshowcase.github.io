@@ -132,6 +132,7 @@ fillc.setAttribute("name","shape");
 fillc.setAttribute("value","fill")
 fillc.setAttribute("id","fill");
 fillc.style.marginTop = "10px";
+fillc.style.marginLeft= "50px";
 filllabel = document.createElement("label");
 filllabel.setAttribute("for","fill")
 filllabel.innerHTML = "Fill   ";
@@ -180,6 +181,7 @@ Ccc = document.createElement("input");
 Bgc.setAttribute("type","color");
 Ccc.setAttribute("type","color");
 //Bgc.style.display = "block";
+Bgc.style.marginRight= "50px";
 Ccc.style.cssFloat = "right";
 Bgc.style.cssFloat = "right";
 Ccc.value = ccolor;
