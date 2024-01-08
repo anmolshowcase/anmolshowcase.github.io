@@ -119,14 +119,7 @@ let Thickness = 5;
 let itteration = 5;
 let branches = 1;
 let branching = 2;
-let SposX = [];
-let SposY = [];
-let EposX = [];
-let EposY = [];
-SposX[0] = CanvasSize/2;
-SposY[0] = CanvasSize;
-EposX[0] = CanvasSize/2;
-EposY[0] = CanvasSize/4*3;
+
 
 let branchAngle = 10;
 
@@ -155,8 +148,8 @@ function redraw(){
     ctxl[tree].beginPath();
     for(let i = 1; i<= itteration; i++) {
         for(let j=1; j<=i; j++){
-            positionl = drawline(branchAngle, 30,positionl[0],positionl[1]);
-            positionr = drawline(branchAngle*-1, 30,positionr[0],positionr[1]);
+            positionl = drawline(branchAngle, 60,positionl[0],positionl[1]);
+            positionr = drawline(branchAngle*-1, 60,positionr[0],positionr[1]);
             branchAngle += branchAngle;
         }
     }
