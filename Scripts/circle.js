@@ -3,7 +3,7 @@ var controls = [];
 var label = [];
 var canvasl = [];
 var ctxl = [];
-var cs = 100;
+var CanvasSize = 100;
 var bgcolor = "#ffaab5"
 var ccolor = "#fff4aa"
 
@@ -42,14 +42,14 @@ cntrls.style.position="absolute";
 
 //LAYOUT ORIENTATION
 if (sw>sh) {
-    cs = sh;
+    CanvasSize = sh;
     
     cntrls.style.Top ="0px";
     cntrls.style.left = sh+"px";
     controlw = sw-sh-4;
     
 }else{
-    cs = sw;
+    CanvasSize = sw;
     
     cntrls.style.top = sw+"px";
 }
@@ -91,8 +91,8 @@ function crtcnvs(index, d=2) {
   }else {
       ctxl[index]=canvasl[index].getContext("2d");
   }
-  canvasl[index].width = cs;
-  canvasl[index].height = cs;
+  canvasl[index].width = CanvasSize;
+  canvasl[index].height = CanvasSize;
   canvasl[index].style.position="absolute";
   canvasl[index].style.left = "0px";
   canvasl[index].style.top = "0px";
@@ -107,14 +107,14 @@ function crtcnvs(index, d=2) {
 //INITIALIZE CANVAS AND CONTROLS
 bg = crtcnvs(0);
 ctxl[bg].fillStyle = bgcolor; 
-ctxl[bg].fillRect(0, 0,cs,cs);
+ctxl[bg].fillRect(0, 0,CanvasSize,CanvasSize);
 
 
 circle = crtcnvs(1);
 ctxl[circle].fillStyle = "#fff4aa";
 ctxl[circle].beginPath(); 
 //Angle = controls[anglec].value*Math.PI/180;
-ctxl[circle].arc(cs/2, cs/2,20,0,7); 
+ctxl[circle].arc(CanvasSize/2, CanvasSize/2,20,0,7); 
 ctxl[circle].fill();
 
 
@@ -122,7 +122,7 @@ anglec = crtcntrl(0,"Angle",360, 0,360,0.1);
 controls[anglec].addEventListener("input", changecircle);
 
 
-radiusc = crtcntrl(1,"Radius",20,0,cs/2,0.1);
+radiusc = crtcntrl(1,"Radius",20,0,CanvasSize/2,0.1);
 controls[radiusc].addEventListener("input", changecircle);
 
 
@@ -182,8 +182,8 @@ Bgc.setAttribute("type","color");
 Ccc.setAttribute("type","color");
 //Bgc.style.display = "block";
 Bgc.style.marginRight= "50px";
-Ccc.style.cssFloat = "right";
-Bgc.style.cssFloat = "right";
+Ccc.style.CanvasSizesFloat = "right";
+Bgc.style.CanvasSizesFloat = "right";
 Ccc.value = ccolor;
 Bgc.value = bgcolor;
 cntrls.appendChild(Bgc);
@@ -195,13 +195,13 @@ Ccc.addEventListener("change",changecolor);
 
 function changecircle(){
     var selection = document.querySelector('input[name="shape"]:checked').value;
-    ctxl[circle].clearRect(0,0,cs, cs);
+    ctxl[circle].clearRect(0,0,CanvasSize, CanvasSize);
     ctxl[circle].strokeStyle=ccolor;
     ctxl[circle].lineWidth = 5;
     ctxl[circle].fillStyle = ccolor;
     ctxl[circle].beginPath(); 
     Angle = controls[anglec].value*Math.PI/180;
-    ctxl[circle].arc(cs/2, cs/2,controls[radiusc]. value,0,Angle);
+    ctxl[circle].arc(CanvasSize/2, CanvasSize/2,controls[radiusc]. value,0,Angle);
     if (selection == "out") {
         ctxl[circle].stroke();
     }
@@ -222,10 +222,10 @@ function changecircle(){
         Y = Math. round(Math.sin(Angle)*controls[radiusc].value) ;
         X = Math. round(Math.cos(Angle)*controls[radiusc].value);
         ctxl[circle].beginPath();
-        ctxl[circle].moveTo((cs/2)+A, cs/2);
-        ctxl[circle].lineTo(cs/2,cs/2);
-        ctxl[circle].lineTo(cs/2+X,cs/2+Y);
-        ctxl[circle].lineTo((cs/2)+A, cs/2);
+        ctxl[circle].moveTo((CanvasSize/2)+A, CanvasSize/2);
+        ctxl[circle].lineTo(CanvasSize/2,CanvasSize/2);
+        ctxl[circle].lineTo(CanvasSize/2+X,CanvasSize/2+Y);
+        ctxl[circle].lineTo((CanvasSize/2)+A, CanvasSize/2);
         ctxl[circle].fill();
         ctxl[circle].closePath();
     }
@@ -238,7 +238,7 @@ function changecolor() {
     ccolor = Ccc.value;
     changecircle();
     ctxl[bg].fillStyle = bgcolor;
-    ctxl[bg].fillRect(0, 0,cs,cs);
+    ctxl[bg].fillRect(0, 0,CanvasSize,CanvasSize);
 }
 
 
