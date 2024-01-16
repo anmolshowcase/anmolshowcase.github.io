@@ -22,15 +22,38 @@ document.body.style.margin = 0; // Remove the margin around the canvas
 document.body.style.overflow = "hidden"; // Make the canvas unscrollable
 
 // make a button with a drop down menu
+let buttonR = Math.floor(Math.random()*225);
+let buttonG = Math.floor(Math.random()*225);
+let buttonB = Math.floor(Math.random()*225);
 const controls = document.createElement("button");
-controls.innerHTML = "Controls";
 document.body.appendChild(controls);
 controls.style.position = "absolute";
 controls.style.right = "10px";
 controls.style.top = "10px";
-controls.style.backgroundColor = "rgba(255,255,255,0.5)";
+controls.style.backgroundColor = "rgba(0,0,0,0)";
 controls.style.border = "none";
 controls.style.cursor = "pointer";
+controls.style.borderRadius = "50%"
+controls.style.width = "70px";
+controls.style.height = "70px";
+controls.style.padding = "0px";
+controls.style.overflow = "hidden";
+buttongraphics = document.createElement("canvas");
+controls.appendChild(buttongraphics);
+btnctx = buttongraphics.getContext("2d");
+buttongraphics.width = 70;
+buttongraphics.height = 70;
+
+
+btnctx.beginPath();
+btnctx.rect(0,0,buttongraphics.width,buttongraphics.height);
+btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
+btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
+btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
+btnctx.clip();
+btnctx.fillStyle = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
+btnctx.fillRect(0,0,buttongraphics.width,buttongraphics.height);
+
 
 const dropDown = document.createElement("div");
 const dropDownul = document.createElement("ul");
