@@ -50,6 +50,11 @@ btnctx.rect(0,0,buttongraphics.width,buttongraphics.height);
 btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
 btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
 btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
+btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
+btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
+btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
+btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
+
 btnctx.clip();
 btnctx.fillStyle = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
 btnctx.fillRect(0,0,buttongraphics.width,buttongraphics.height);
