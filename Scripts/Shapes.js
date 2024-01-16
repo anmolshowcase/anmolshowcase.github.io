@@ -1,4 +1,60 @@
+//Canvas Creation
 const canvas = document.createElement('canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
+
+// Function to update canvas size
+function pageResized() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+//Setting the size of the canvas for the first time
+pageResized();
+
+//Page resized
+window.onresize = pageResized;
+
+//Make Canvas Background COlour to black
+canvas.style.backgroundColor = "black"; // Set the background color to black
+//Remove the default Margin of the body
+document.body.style.margin = 0; // Remove the margin around the canvas
+//remove the scroll
+document.body.style.overflow = "hidden"; // Make the canvas unscrollable
+
+// make a button with a drop down menu
+const controls = document.createElement("button");
+controls.innerHTML = "Controls";
+document.body.appendChild(controls);
+controls.style.position = "absolute";
+controls.style.right = "10px";
+controls.style.top = "10px";
+controls.style.backgroundColor = "rgba(255,255,255,0.5)";
+controls.style.border = "none";
+controls.style.cursor = "pointer";
+
+const dropDown = document.createElement("div");
+const dropDownul = document.createElement("ul");
+document.body.appendChild(dropDown);
+dropDown.appendChild(dropDownul);
+
+dropDown.style.position = "absolute";
+dropDown.style.right = "10px";
+dropDown.style.top = "30px";
+dropDown.style.backgroundColor = "rgba(255,255,255,0.2)";
+dropDown.style.color = "rgba(255,0,0,1)";
+dropDown.style.display = "none";
+
+dropDownul.style.listStyleType = "none";
+dropDownul.style.padding = 0;
+dropDownul.style.margin = 0;
+
+controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
+
+const dropDownli = document.createElement("li");
+dropDownli.innerHTML = "testing with some extra long strings";
+
+dropDownul.appendChild(dropDownli);
+
+dropDownli.style.padding = "5px";
+dropDownli.onmouseover = function() {dropDown.style.backgroundColor = "rgba(100,100,100,1)";};
+dropDownli.onmouseout = function() {dropDown.style.backgroundColor = "rgba("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+",1)";};
