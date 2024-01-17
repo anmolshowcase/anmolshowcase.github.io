@@ -1,5 +1,7 @@
 //Canvas Creation
-let gap = 10;
+let choice = [2,2,2,3,4,4,4,4,5,5];
+let number = 0;
+let gap = 0;
 let dfc = 0;
 let radius1 = 0;
 let radius2 = 0;
@@ -55,8 +57,9 @@ function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
     let w = buttongraphics.width;
     let h = buttongraphics.height;
     let a = Math.random()*tau;
+    let x = Math.sqrt(distFromCenter*distFromCenter*2)/2;
     let norh = 0;
-    if(NoOfHoles > 4){
+    if(NoOfHoles > 4 && radius2>0){
         norh = a > 3.6 ? 0 : NoOfHoles - 4;
     }
     let r = tau/(NoOfHoles-norh);
@@ -66,10 +69,10 @@ function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
     btnctx.rotate(a);
     for (var i = 0; i < NoOfHoles-norh; i++){
         btnctx.moveTo(0,0);
-        btnctx.arc(0+distFromCenter,0+distFromCenter,sizeOfHole,0,tau,true);
+        btnctx.arc(x,x,sizeOfHole,0,tau,true);
         btnctx.rotate(r);
     }
-    if(norh!=0){
+    if(norh!=0 ){
         btnctx.moveTo(0,0);
         btnctx.arc(0,0,sizeOfHole2,0,tau,true);
     }
@@ -77,19 +80,21 @@ function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
     btnctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 function initButton(){
-    gap = (Math.random()*10)+2;
-    dfc = Math.random()*(buttongraphics.width/2-gap);
-    radius1 = Math.random()*(Math.min(dfc,buttongraphics.width/2-gap-dfc));
-    radius2 = Math.random()*dfc-radius1;
-    buttonmask(4,dfc,radius1,radius2);
-    console.log("gap: "+gap+" dfc: "+dfc+" radius: "+radius1+" radius2: "+radius2);
-
+    number = choice[Math.floor(Math.random()*choice.length)];
+    gap = Math.floor(Math.random()*5)+5;
+    let temp = Math.min(gap)
+    radius1 = Math.floor(Math.random()*4)+2;
+    dfc = Math.floor(Math.random()*(buttongraphics.width/2-gap-radius1*2))+radius1*2;
+    radius2 = Math.floor(Math.random()*(dfc-radius1-5))+2;
+    buttonmask(number,dfc,radius1,radius2);
+    console.log("gap: "+gap+" dfc: "+dfc+" radius: "+radius1+" radius2: "+radius2, buttongraphics.width/2);
+    console.log(choice.length, number);
 }
 initButton();
 color = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
 btnctx.fillStyle = color;
 btnctx.fillRect(0,0,buttongraphics.width,buttongraphics.height);
-btnctx.fillStyle = "rgba(255,0,0,0.3)";
+btnctx.fillStyle = "rgba(255,255,255,0.3)";
 btnctx.translate(buttongraphics.width/2,buttongraphics.height/2);
 //btnctx.fillRect(-10,-10,20,20);
 btnctx.beginPath();
