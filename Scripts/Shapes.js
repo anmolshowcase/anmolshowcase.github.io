@@ -1,5 +1,11 @@
 //Canvas Creation
+let gap = 10;
+let dfc = 0;
+let radius1 = 0;
+let radius2 = 0;
+const tau = Math.PI*2;
 const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
 document.body.appendChild(canvas);
 
 // Function to update canvas size
@@ -45,22 +51,50 @@ buttongraphics.width = 70;
 buttongraphics.height = 70;
 
 //Button Hole masks
-function buttonmask() {}
-btnctx.beginPath();
-btnctx.rect(0,0,buttongraphics.width,buttongraphics.height);
-btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2-10);
-btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.moveTo(buttongraphics.width/2+10,buttongraphics.height/2-10);
-btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2+10);
-btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.clip();
+function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
+    let w = buttongraphics.width;
+    let h = buttongraphics.height;
+    let a = Math.random()*tau;
+    let norh = 0;
+    if(NoOfHoles > 4){
+        norh = a > 3.6 ? 0 : NoOfHoles - 4;
+    }
+    let r = tau/(NoOfHoles-norh);
+    btnctx.translate(w/2,h/2);
+    btnctx.beginPath();
+    btnctx.rect(-w/2,-h/2,w,h);
+    btnctx.rotate(a);
+    for (var i = 0; i < NoOfHoles-norh; i++){
+        btnctx.moveTo(0,0);
+        btnctx.arc(0+distFromCenter,0+distFromCenter,sizeOfHole,0,tau,true);
+        btnctx.rotate(r);
+    }
+    if(norh!=0){
+        btnctx.moveTo(0,0);
+        btnctx.arc(0,0,sizeOfHole2,0,tau,true);
+    }
+    btnctx.clip();
+    btnctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+function initButton(){
+    gap = (Math.random()*10)+2;
+    dfc = Math.random()*(buttongraphics.width/2-gap);
+    radius1 = Math.random()*(Math.min(dfc,buttongraphics.width/2-gap-dfc));
+    radius2 = Math.random()*dfc-radius1;
+    buttonmask(4,dfc,radius1,radius2);
+    console.log("gap: "+gap+" dfc: "+dfc+" radius: "+radius1+" radius2: "+radius2);
 
-
-btnctx.fillStyle = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
+}
+initButton();
+color = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
+btnctx.fillStyle = color;
 btnctx.fillRect(0,0,buttongraphics.width,buttongraphics.height);
-
+btnctx.fillStyle = "rgba(255,0,0,0.3)";
+btnctx.translate(buttongraphics.width/2,buttongraphics.height/2);
+//btnctx.fillRect(-10,-10,20,20);
+btnctx.beginPath();
+btnctx.arc(0,0,buttongraphics.width/2-gap,0,tau);
+btnctx.fill();
 
 const dropDown = document.createElement("div");
 const dropDownul = document.createElement("ul");
@@ -88,3 +122,25 @@ dropDownul.appendChild(dropDownli);
 dropDownli.style.padding = "5px";
 dropDownli.onmouseover = function() {dropDown.style.backgroundColor = "rgba(100,100,100,1)";};
 dropDownli.onmouseout = function() {dropDown.style.backgroundColor = "rgba("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+",1)";};
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////
+ctx.translate(canvas.width/2, canvas.height/2);
+ctx.beginPath();
+ctx.rect(-50,-50,100,100);
+t=6;
+for (var i=0; i<t; i++) {
+    ctx.moveTo(0,0);
+    ctx.rotate(tau/t);
+    ctx.arc(10,10,5,0,tau,true);
+}
+ctx.clip();
+ctx.fillStyle = color;
+ctx.fillRect(-canvas.width/2, -canvas.height/2,canvas.width, canvas.height);
