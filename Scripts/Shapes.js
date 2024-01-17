@@ -15,7 +15,7 @@ pageResized();
 window.onresize = pageResized;
 
 //Make Canvas Background COlour to black
-canvas.style.backgroundColor = "black"; // Set the background color to black
+canvas.style.backgroundColor = "Black"; // Set the background color to black
 //Remove the default Margin of the body
 document.body.style.margin = 0; // Remove the margin around the canvas
 //remove the scroll
@@ -44,18 +44,20 @@ btnctx = buttongraphics.getContext("2d");
 buttongraphics.width = 70;
 buttongraphics.height = 70;
 
-
+//Button Hole masks
+function buttonmask() {}
 btnctx.beginPath();
 btnctx.rect(0,0,buttongraphics.width,buttongraphics.height);
 btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
+btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2-10);
 btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
+btnctx.moveTo(buttongraphics.width/2+10,buttongraphics.height/2-10);
 btnctx.arc(buttongraphics.width/2+10,buttongraphics.height/2-10,buttongraphics.width/12,0,Math.PI*2,true);
-btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2);
+btnctx.moveTo(buttongraphics.width/2-10,buttongraphics.height/2+10);
 btnctx.arc(buttongraphics.width/2-10,buttongraphics.height/2+10,buttongraphics.width/12,0,Math.PI*2,true);
-
 btnctx.clip();
+
+
 btnctx.fillStyle = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
 btnctx.fillRect(0,0,buttongraphics.width,buttongraphics.height);
 
