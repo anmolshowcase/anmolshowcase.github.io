@@ -5,6 +5,7 @@ let gap = 0;
 let dfc = 0;
 let radius1 = 0;
 let radius2 = 0;
+
 const tau = Math.PI*2;
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -30,9 +31,9 @@ document.body.style.margin = 0; // Remove the margin around the canvas
 document.body.style.overflow = "hidden"; // Make the canvas unscrollable
 
 // make a button with a drop down menu
-let buttonR = Math.floor(Math.random()*225);
-let buttonG = Math.floor(Math.random()*225);
-let buttonB = Math.floor(Math.random()*225);
+let buttonH = Math.floor(Math.random()*360);
+let buttonS = Math.floor(Math.random()*100);
+let buttonL = Math.floor(Math.random()*70)+30;
 const controls = document.createElement("button");
 document.body.appendChild(controls);
 controls.style.position = "absolute";
@@ -51,7 +52,7 @@ controls.appendChild(buttongraphics);
 btnctx = buttongraphics.getContext("2d");
 buttongraphics.width = 70;
 buttongraphics.height = 70;
-
+let buttonsize = buttongraphics.width/2-4;
 //Button Hole masks
 function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
     let w = buttongraphics.width;
@@ -82,24 +83,35 @@ function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
 function initButton(){
     number = choice[Math.floor(Math.random()*choice.length)];
     gap = Math.floor(Math.random()*5)+5;
-    let temp = Math.min(gap)
     radius1 = Math.floor(Math.random()*4)+2;
-    dfc = Math.floor(Math.random()*(buttongraphics.width/2-gap-radius1*2))+radius1*2;
+    dfc = Math.floor(Math.random()*(buttonsize-gap-radius1*2))+radius1*2;
     radius2 = Math.floor(Math.random()*(dfc-radius1-5))+2;
     buttonmask(number,dfc,radius1,radius2);
     console.log("gap: "+gap+" dfc: "+dfc+" radius: "+radius1+" radius2: "+radius2, buttongraphics.width/2);
     console.log(choice.length, number);
 }
 initButton();
-color = "rgba("+buttonR+","+buttonG+","+buttonB+",1)";
+color = "hsla("+buttonH+","+buttonS+"%,"+buttonL+"%,1)";
 btnctx.fillStyle = color;
-btnctx.fillRect(0,0,buttongraphics.width,buttongraphics.height);
-btnctx.fillStyle = "rgba(255,255,255,0.3)";
 btnctx.translate(buttongraphics.width/2,buttongraphics.height/2);
-//btnctx.fillRect(-10,-10,20,20);
 btnctx.beginPath();
-btnctx.arc(0,0,buttongraphics.width/2-gap,0,tau);
+btnctx.shadowColor = "hsla("+buttonH+","+buttonS+"%,"+(buttonL-29)+"%,1)";
+btnctx.shadowOffsetX = 3;
+btnctx.shadowOffsetY = 3;
+btnctx.moveTo(0,0);
+btnctx.arc(0,0,buttonsize,0,tau);
 btnctx.fill();
+
+btnctx.shadowOffsetX = -2;
+btnctx.shadowOffsetY = -2;
+//btnctx.shadowBlur = 2;
+btnctx.fillStyle = "rgba(255,255,255,0.4)";
+btnctx.moveTo(0,0);
+btnctx.beginPath();
+btnctx.arc(1,1,buttonsize-gap,0,tau);
+btnctx.fill();
+
+
 
 const dropDown = document.createElement("div");
 const dropDownul = document.createElement("ul");
