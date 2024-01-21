@@ -129,7 +129,14 @@ dropDownul.style.listStyleType = "none";
 dropDownul.style.padding = 0;
 dropDownul.style.margin = 0;
 
-controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
+//controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
+controls.onclick = function() {
+    controls.style.transition = "top 1s cubic-bezier(.44,0,.83,.12) 0s";
+    controls.style.top = "90vh"; // Change the value to the desired position
+    controls.addEventListener("transitionend", function() {
+        controls.style.display = "none";
+      });
+    };
 
 const dropDownli = document.createElement("li");
 dropDownli.innerHTML = "testing with some extra long strings";
@@ -161,3 +168,8 @@ for (var i=0; i<t; i++) {
 ctx.clip();
 ctx.fillStyle = color;
 ctx.fillRect(-canvas.width/2, -canvas.height/2,canvas.width, canvas.height);
+canvas.onclick = function() {
+    // Unhide the button
+    controls.style.display = 'block';
+    controls.style.top = "10px";
+  };
