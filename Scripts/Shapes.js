@@ -8,8 +8,10 @@ let radius2 = 0;
 
 const tau = Math.PI*2;
 const canvas = document.createElement('canvas');
+const style = document.createElement('style');
 const ctx = canvas.getContext('2d');
 document.body.appendChild(canvas);
+document.body.appendChild(style);
 
 // Function to update canvas size
 function pageResized() {
@@ -21,7 +23,7 @@ function pageResized() {
 pageResized();
 
 //Page resized
-window.onresize = pageResized;
+//window.onresize = pageResized;
 
 //Make Canvas Background COlour to black
 canvas.style.backgroundColor = "Black"; // Set the background color to black
@@ -132,7 +134,8 @@ dropDownul.style.margin = 0;
 //controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
 controls.onclick = function() {
     controls.style.transition = "top 1s cubic-bezier(.44,0,.83,.12) 0s";
-    controls.style.top = "90vh"; // Change the value to the desired position
+    controls.style.top = "110vh"; // Change the value to the desired position
+    dropDown.style.display = dropDown.style.display === 'none'?'block':'none';
     controls.addEventListener("transitionend", function() {
         controls.style.display = "none";
       });
@@ -172,4 +175,167 @@ canvas.onclick = function() {
     // Unhide the button
     controls.style.display = 'block';
     controls.style.top = "10px";
-  };
+};
+
+
+class Slider{
+    constructor(name, parent =document.body ,index=0, min=0, max=100, defaultValue=50) {
+        this.index = index;
+        this.name = name;
+        this.min = min;
+        this.max = max;
+        this.defaultValue = defaultValue;
+        this.color = color;
+        this.parent = parent;
+    }
+    init(){
+        this.outerbox = document.createElement("div");
+        this.sliderbox = document.createElement("div");
+        this.valuebox = document.createElement("div");
+        this.namebox = document.createElement("div");
+        this.namebox.innerHTML = this.name;
+        this.inputslider = document.createElement("input");
+        this.inputslider.type = "range";
+        this.inputslider.min = this.min;
+        this.inputslider.max = this.max;
+        this.inputslider.value = this.defaultValue;
+        this.inputvalue = document.createElement("input");
+        this.inputvalue.pattern = "[^a-zA-Z]+";
+        //this.inputvalue.type = "number";
+        this.displayvalue = document.createElement("span");
+        this.displayvalue.innerHTML = this.inputslider.value;
+        this.outerbox.appendChild(this.sliderbox);
+        this.outerbox.appendChild(this.valuebox);
+        this.outerbox.appendChild(this.namebox);
+        this.sliderbox.appendChild(this.inputslider);
+        this.valuebox.appendChild(this.inputvalue);
+        this.valuebox.appendChild(this.displayvalue);
+        this.parent.appendChild(this.outerbox);
+        
+        this.outerbox.className = "outbox";
+        this.sliderbox.className = "sldbox";
+        this.valuebox.className = "valbox";
+        this.namebox.className = "nambox";
+
+        this.sliderbox.style.display = "inline";
+        this.valuebox.style.display = "inline";
+        this.valuebox.style.position = "absolute";
+        this.valuebox.style.cursor = "text";
+        this.valuebox.style.fontFamily = "Helvetica";
+        this.valuebox.style.border = "none";
+        this.valuebox.style.background = "white";
+        this.displayvalue.style.padding = "2px 16px";
+        this.inputvalue.style.border = "none";
+        this.inputvalue.style.borderBottom = "2px solid grey";
+        this.inputvalue.style.textAlign = "center";
+        this.inputvalue.style.fontFamily = "Helvetica";
+        this.inputvalue.style.width =  "42px";
+        this.inputvalue.style.display = "none";
+
+
+        this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.valuebox));
+        this.displayvalue.addEventListener("mouseout", ()=>this.outvalue(this.valuebox));
+        this.displayvalue.addEventListener("click", ()=>this.clickvalue(this.displayvalue, this.inputvalue, this.inputslider.value));
+        this.inputvalue.addEventListener("focusout", ()=>this.valuentered(this.inputvalue, this.displayvalue,this.inputslider));
+        this.inputslider.addEventListener("input", ()=>this.valuechanged(this.displayvalue,this.inputslider));
+    }
+    overvalue(a) {
+        a.style.border = "1px solid rgb(20,20,20)";
+        a.style.background ="rgb(220,220,220)";
+    }
+    outvalue(a){
+        a.style.border = "none";
+        a.style.background = "white";
+    }
+    clickvalue(a,b, value){
+        b.style.display = "inline";
+        a.style.display = "none";
+        b.value = value;
+        b.select();
+    }
+    valuentered(a,b,c){
+        b.style.display = "inline";
+        a.style.display = "none";
+        let value = parseFloat(a.value);
+        console.log(b.value);
+        if (!isNaN(value)) {
+            c.value = value;
+            this.valuechanged(b,c);
+        }
+    }
+    valuechanged(a,b){
+        a.innerHTML = b.value;
+    }
+
+}
+
+style.innerHTML = "input[type='range']{-webkit-appearance: none; overflow:hidden; border-radius: 16px;}"+
+"input[type='range']::-webkit-slider-runnable-track{"+
+"height: 15px;"+
+"background: black;"+
+"border-radius: 16px;}"+
+"input[type='range']::-webkit-slider-thumb {"+
+"-webkit-appearance: none;"+
+"appearence: none;"+
+"height: 15px;"+
+"width: 15px;"+
+"background: pink;"+
+"border-radius: 50%;"+
+"border: 2px solid white;"+
+"box-shadow: -407px 0 0 400px #f50;"+
+"}"
+;
+
+style.innerHTML += "input[type='range']::-moz-range-track{"+
+"height: 15px;"+
+"background: black;"+
+"border-radius: 16px;}"+
+"input[type='range']::-moz-range-thumb {"+
+"-moz-appearance: none;"+
+"appearence: none;"+
+"height: 12px;"+
+"width: 12px;"+
+"background: pink;"+
+"border-radius: 50%;"+
+"border: 2px solid white;"+
+"box-shadow: -407px 0 0 400px #f50;"+
+"}";
+
+a = new Slider("TEST", dropDownul);
+a.init();
+b = new Slider("TEST 2", dropDownul, 1, -100, 200, 45);
+b.init();
+// Create a container element for the slider
+var slidecontainer = document.createElement("div");
+slidecontainer.style.width = "50%"; // Set the width of the container
+slidecontainer.style.position = "absolute";
+slidecontainer.style.top = "10px";
+slidecontainer.style.left = "100px";
+// Create an input element of type range
+var slider = document.createElement("input");
+slider.type = "range"; // Set the input type to range
+slider.min = "1"; // Set the minimum value
+slider.max = "100"; // Set the maximum value
+slider.value = "50"; // Set the default value
+slider.style.width = "100%"; // Set the width of the slider
+slider.style.height = "25px"; // Set the height of the slider
+slider.style.background = "#d3d3d3"; // Set the background color of the slider
+slider.style.outline = "none"; // Remove the outline
+slider.style.opacity = "0"; // Set the opacity
+slider.style.transition = "opacity 0.2s"; // Set the transition effect
+slider.style.opacity = "1"; // Set the opacity
+// Create a span element to display the slider value
+var output = document.createElement("span");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Append the slider and the output to the container
+slidecontainer.appendChild(slider);
+slidecontainer.appendChild(output);
+
+// Append the container to the body of the document
+document.body.appendChild(slidecontainer);
+
+// Add an event listener to the slider to update the output value
+slider.addEventListener("input", function() {
+  output.innerHTML = this.value;
+});
