@@ -184,7 +184,7 @@ canvas.onclick = function() {
 
 
 class Slider{
-    constructor(name, parent =document.body ,index=0, min=0, max=100, defaultValue=50) {
+    constructor(name, parent =document.body ,color = "grey", index=0, min=0, max=100, defaultValue=50) {
         this.index = index;
         this.name = name;
         this.min = min;
@@ -226,6 +226,8 @@ class Slider{
         this.outerbox.style.display = "grid";
         this.outerbox.style.gridTemplateColumns = "repeat(4, 1fr)";
         this.outerbox.style.gridTemplateRows = "30px 30px";
+        this.outerbox.style.background = this.color;
+        this.outerbox.style.paddingTop = "6px";
         this.sliderbox.style.gridArea = "2/1/3/5";
         this.sliderbox.style.padding = "0px 5px";
         this.valuebox.style.gridArea = "1/4/2/5";
@@ -253,8 +255,11 @@ class Slider{
         this.inputvalue.style.width =  "100%";
         this.inputvalue.style.height =  "100%";
         this.inputvalue.style.display = "none";
-        this.namebox.style.gridArea = "1/2/2/4";
-
+        this.namebox.style.gridArea = "1/1/2/4";
+        this.namebox.style.paddingLeft = '10px';
+        this.namebox.style.lineHeight = "30px";
+        style.innerHTML += "::selection {background-color: red; color: white;}";
+      
 
         this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.displayvalue));
         this.displayvalue.addEventListener("mouseout", ()=>this.outvalue(this.displayvalue));
@@ -326,5 +331,5 @@ style.innerHTML += "input[type='range']::-moz-range-track{"+
 
 a = new Slider("TEST", dropDownul);
 a.init();
-b = new Slider("TEST 2", dropDownul, 1, -100, 200, 45);
+b = new Slider("TEST 2", dropDownul,"cyan", 1, -100, 200, 45);
 b.init();
