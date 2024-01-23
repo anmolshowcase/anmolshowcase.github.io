@@ -126,6 +126,8 @@ dropDown.style.top = "30px";
 dropDown.style.backgroundColor = "rgba(255,255,255,0.2)";
 dropDown.style.color = "rgba(255,0,0,1)";
 dropDown.style.display = "none";
+dropDown.style.maxWidth = "20vw";
+dropDown.style.minWidth = "200px";
 
 dropDownul.style.listStyleType = "none";
 dropDownul.style.padding = 0;
@@ -227,6 +229,7 @@ class Slider{
         this.displayvalue.style.padding = "2px 16px";
         this.inputvalue.style.border = "none";
         this.inputvalue.style.borderBottom = "2px solid grey";
+        this.inputslider.style.width = "300px";
         this.inputvalue.style.textAlign = "center";
         this.inputvalue.style.fontFamily = "Helvetica";
         this.inputvalue.style.width =  "42px";
