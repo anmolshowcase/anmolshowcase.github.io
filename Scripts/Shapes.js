@@ -163,7 +163,9 @@ dropDownli.onmouseout = function() {dropDown.style.backgroundColor = "rgba("+Mat
 
 
 
-/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
 ctx.translate(canvas.width/2, canvas.height/2);
 ctx.beginPath();
 ctx.rect(-50,-50,100,100);
@@ -182,18 +184,26 @@ canvas.onclick = function() {
     controls.style.top = "10px";
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 class Slider{
-    constructor(name, parent =document.body ,color = "grey", index=0, min=0, max=100, defaultValue=50) {
+    constructor(name, parent =document.body ,colorH = 200,colorS = 30,colorL = 30, index=0, min=0, max=100, defaultValue=50) {
         this.index = index;
         this.name = name;
         this.min = min;
         this.max = max;
+        this.colorH = colorH;
+        this.colorS = colorS;
+        this.colorL = colorL;
         this.defaultValue = defaultValue;
-        this.color = color;
+        this.color = "hsl(" + colorH + "," + colorS + "%," + colorL+"%)";
+        this.namecolor = colorL<50?"white":"black";
+        this.displaycolor = "hsl(" + colorH + "," + colorS + "%," + ((colorL+30)>100?(colorL-30):(colorL+30))+"%)";
+        this.invertedlightcolor = "hsl("+(this.colorH+180)+" "+this.colorS+"%"+((this.colorL+30)>100?(this.colorL-30):(this.colorL+30))+"%)";
         this.parent = parent;
     }
     init(){
+        this.sliderstyle();
         this.outerbox = document.createElement("div");
         this.sliderbox = document.createElement("div");
         this.valuebox = document.createElement("div");
@@ -221,6 +231,8 @@ class Slider{
         this.sliderbox.className = "sldbox";
         this.valuebox.className = "valbox";
         this.namebox.className = "nambox";
+        this.inputslider.className = "inputslider"+this.index+"sl";
+        this.inputvalue.className = "inputvalue"+this.index+"sv";
 
         
         this.outerbox.style.display = "grid";
@@ -237,7 +249,7 @@ class Slider{
         this.valuebox.style.border = "none";
         this.valuebox.style.marginRight = "16px";
         this.valuebox.style.marginBottom = "3px";
-        this.displayvalue.style.background = "white";
+        this.displayvalue.style.background = this.displaycolor;
         this.displayvalue.style.width = "100%";
         this.displayvalue.style.height = "100%";
         this.displayvalue.style.display = "block";
@@ -255,10 +267,12 @@ class Slider{
         this.inputvalue.style.width =  "100%";
         this.inputvalue.style.height =  "100%";
         this.inputvalue.style.display = "none";
+        this.valuebox.style.color = "black";
         this.namebox.style.gridArea = "1/1/2/4";
         this.namebox.style.paddingLeft = '10px';
         this.namebox.style.lineHeight = "30px";
-        style.innerHTML += "::selection {background-color: red; color: white;}";
+        this.namebox.style.color = this.namecolor;
+        
       
 
         this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.displayvalue));
@@ -267,13 +281,49 @@ class Slider{
         this.inputvalue.addEventListener("focusout", ()=>this.valuentered(this.inputvalue, this.displayvalue,this.inputslider));
         this.inputslider.addEventListener("input", ()=>this.valuechanged(this.displayvalue,this.inputslider));
     }
+    sliderstyle(){
+        //let l = (this.colorL+30)>100?this.colorL-50:100;
+        style.innerHTML += "input[type='range']{-webkit-appearance: none; overflow:hidden; border-radius: 16px;}"+
+        ".inputslider"+this.index+"sl::-webkit-slider-runnable-track{"+
+        "height: 15px;"+
+        "background: "+this.invertedlightcolor+";"+
+        "border-radius: 16px;}"+
+        ".inputslider"+this.index+"sl::-webkit-slider-thumb {"+
+        "-webkit-appearance: none;"+
+        "appearence: none;"+
+        "height: 15px;"+
+        "width: 15px;"+
+        "background: "+this.color+";"+
+        "border-radius: 50%;"+
+        "border: 2px solid hsl("+this.colorH+" "+this.colorS+"% "+((this.colorL+30)>100?this.colorL-50:100)+"%);"+
+        "box-shadow: -407px 0 0 400px #f50;"+
+        "}"
+        ;
+
+        style.innerHTML += ".inputslider"+this.index+"sl::-moz-range-track{"+
+        "height: 15px;"+
+        "background: "+this.invertedlightcolor+";"+
+        "border-radius: 16px;}"+
+        ".inputslider"+this.index+"sl::-moz-range-thumb {"+
+        "-moz-appearance: none;"+
+        "appearence: none;"+
+        "height: 12px;"+
+        "width: 12px;"+
+        "background: "+this.color+";"+
+        "border-radius: 50%;"+
+        "border: 2px solid hsl("+this.colorH+" "+this.colorS+"% "+((this.colorL+30)>100?this.colorL-50:100)+"%);"+
+        "box-shadow: -407px 0 0 400px "+this.displaycolor+";"+
+        "}";
+
+        style.innerHTML += ".inputvalue"+this.index+"sv::selection {background-color: "+this.color+"; color:"+this.namecolor+";}";
+    }
     overvalue(a) {
         a.style.border = "1px solid rgb(20,20,20)";
         a.style.background ="rgb(220,220,220)";
     }
     outvalue(a){
         a.style.border = "1px solid rgb(255,255,255)";
-        a.style.background = "white";
+        a.style.background = this.displaycolor;
     }
     clickvalue(a,b, value){
         b.style.display = "block";
@@ -297,39 +347,9 @@ class Slider{
 
 }
 
-style.innerHTML = "input[type='range']{-webkit-appearance: none; overflow:hidden; border-radius: 16px;}"+
-"input[type='range']::-webkit-slider-runnable-track{"+
-"height: 15px;"+
-"background: black;"+
-"border-radius: 16px;}"+
-"input[type='range']::-webkit-slider-thumb {"+
-"-webkit-appearance: none;"+
-"appearence: none;"+
-"height: 15px;"+
-"width: 15px;"+
-"background: pink;"+
-"border-radius: 50%;"+
-"border: 2px solid white;"+
-"box-shadow: -407px 0 0 400px #f50;"+
-"}"
-;
-
-style.innerHTML += "input[type='range']::-moz-range-track{"+
-"height: 15px;"+
-"background: black;"+
-"border-radius: 16px;}"+
-"input[type='range']::-moz-range-thumb {"+
-"-moz-appearance: none;"+
-"appearence: none;"+
-"height: 12px;"+
-"width: 12px;"+
-"background: pink;"+
-"border-radius: 50%;"+
-"border: 2px solid white;"+
-"box-shadow: -407px 0 0 400px #f50;"+
-"}";
+/////////////////////////////////////////////////////////////////////////////////////////
 
 a = new Slider("TEST", dropDownul);
 a.init();
-b = new Slider("TEST 2", dropDownul,"cyan", 1, -100, 200, 45);
+b = new Slider("TEST 2", dropDownul,0,100,100, 1, -100, 200, 100);
 b.init();
