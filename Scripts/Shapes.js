@@ -126,12 +126,15 @@ dropDown.style.top = "30px";
 dropDown.style.backgroundColor = "rgba(255,255,255,0.2)";
 dropDown.style.color = "rgba(255,0,0,1)";
 dropDown.style.display = "none";
-dropDown.style.maxWidth = "20vw";
+dropDown.style.width = "20vw";
 dropDown.style.minWidth = "200px";
 
 dropDownul.style.listStyleType = "none";
 dropDownul.style.padding = 0;
 dropDownul.style.margin = 0;
+dropDownul.style.display="grid";
+dropDownul.style.gridTemplateRows="1fr";
+dropDownul.style.gridAutoRows="2fr";
 
 //controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
 controls.onclick = function() {
@@ -219,25 +222,42 @@ class Slider{
         this.valuebox.className = "valbox";
         this.namebox.className = "nambox";
 
-        this.sliderbox.style.display = "inline";
-        this.valuebox.style.display = "inline";
-        this.valuebox.style.position = "absolute";
+        
+        this.outerbox.style.display = "grid";
+        this.outerbox.style.gridTemplateColumns = "repeat(4, 1fr)";
+        this.outerbox.style.gridTemplateRows = "1fr 1fr";
+        this.sliderbox.style.gridArea = "2/1/3/5";
+        this.sliderbox.style.padding = "0px 5px";
+        this.valuebox.style.gridArea = "1/4/2/5";
+        this.valuebox.style.textAlign = "center";
         this.valuebox.style.cursor = "text";
         this.valuebox.style.fontFamily = "Helvetica";
         this.valuebox.style.border = "none";
-        this.valuebox.style.background = "white";
-        this.displayvalue.style.padding = "2px 16px";
+        this.valuebox.style.marginRight = "16px";
+        this.valuebox.style.marginBottom = "3px";
+        this.displayvalue.style.background = "white";
+        this.displayvalue.style.width = "100%";
+        this.displayvalue.style.height = "100%";
+        this.displayvalue.style.display = "block";
+        this.displayvalue.style.lineHeight = "28px";
+        this.displayvalue.style.borderRadius = "20px";
+        this.displayvalue.style.border = "1px solid rgb(255,255,255)";
         this.inputvalue.style.border = "none";
         this.inputvalue.style.borderBottom = "2px solid grey";
-        this.inputslider.style.width = "300px";
+        this.inputslider.style.width = "100%";
         this.inputvalue.style.textAlign = "center";
+        this.inputvalue.style.padding = "0px";
+        this.inputvalue.style.borderRadius = "20px";
+        this.inputvalue.style.outline = "none";
         this.inputvalue.style.fontFamily = "Helvetica";
-        this.inputvalue.style.width =  "42px";
+        this.inputvalue.style.width =  "100%";
+        this.inputvalue.style.height =  "100%";
         this.inputvalue.style.display = "none";
+        this.namebox.style.gridArea = "1/2/2/3";
 
 
-        this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.valuebox));
-        this.displayvalue.addEventListener("mouseout", ()=>this.outvalue(this.valuebox));
+        this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.displayvalue));
+        this.displayvalue.addEventListener("mouseout", ()=>this.outvalue(this.displayvalue));
         this.displayvalue.addEventListener("click", ()=>this.clickvalue(this.displayvalue, this.inputvalue, this.inputslider.value));
         this.inputvalue.addEventListener("focusout", ()=>this.valuentered(this.inputvalue, this.displayvalue,this.inputslider));
         this.inputslider.addEventListener("input", ()=>this.valuechanged(this.displayvalue,this.inputslider));
@@ -247,17 +267,17 @@ class Slider{
         a.style.background ="rgb(220,220,220)";
     }
     outvalue(a){
-        a.style.border = "none";
+        a.style.border = "1px solid rgb(255,255,255)";
         a.style.background = "white";
     }
     clickvalue(a,b, value){
-        b.style.display = "inline";
+        b.style.display = "block";
         a.style.display = "none";
         b.value = value;
         b.select();
     }
     valuentered(a,b,c){
-        b.style.display = "inline";
+        b.style.display = "block";
         a.style.display = "none";
         let value = parseFloat(a.value);
         console.log(b.value);
@@ -308,37 +328,3 @@ a = new Slider("TEST", dropDownul);
 a.init();
 b = new Slider("TEST 2", dropDownul, 1, -100, 200, 45);
 b.init();
-// Create a container element for the slider
-var slidecontainer = document.createElement("div");
-slidecontainer.style.width = "50%"; // Set the width of the container
-slidecontainer.style.position = "absolute";
-slidecontainer.style.top = "10px";
-slidecontainer.style.left = "100px";
-// Create an input element of type range
-var slider = document.createElement("input");
-slider.type = "range"; // Set the input type to range
-slider.min = "1"; // Set the minimum value
-slider.max = "100"; // Set the maximum value
-slider.value = "50"; // Set the default value
-slider.style.width = "100%"; // Set the width of the slider
-slider.style.height = "25px"; // Set the height of the slider
-slider.style.background = "#d3d3d3"; // Set the background color of the slider
-slider.style.outline = "none"; // Remove the outline
-slider.style.opacity = "0"; // Set the opacity
-slider.style.transition = "opacity 0.2s"; // Set the transition effect
-slider.style.opacity = "1"; // Set the opacity
-// Create a span element to display the slider value
-var output = document.createElement("span");
-output.innerHTML = slider.value; // Display the default slider value
-
-// Append the slider and the output to the container
-slidecontainer.appendChild(slider);
-slidecontainer.appendChild(output);
-
-// Append the container to the body of the document
-document.body.appendChild(slidecontainer);
-
-// Add an event listener to the slider to update the output value
-slider.addEventListener("input", function() {
-  output.innerHTML = this.value;
-});
