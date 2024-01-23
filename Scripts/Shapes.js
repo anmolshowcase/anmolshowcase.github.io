@@ -225,7 +225,7 @@ class Slider{
         
         this.outerbox.style.display = "grid";
         this.outerbox.style.gridTemplateColumns = "repeat(4, 1fr)";
-        this.outerbox.style.gridTemplateRows = "1fr 1fr";
+        this.outerbox.style.gridTemplateRows = "30px 30px";
         this.sliderbox.style.gridArea = "2/1/3/5";
         this.sliderbox.style.padding = "0px 5px";
         this.valuebox.style.gridArea = "1/4/2/5";
@@ -253,7 +253,7 @@ class Slider{
         this.inputvalue.style.width =  "100%";
         this.inputvalue.style.height =  "100%";
         this.inputvalue.style.display = "none";
-        this.namebox.style.gridArea = "1/2/2/3";
+        this.namebox.style.gridArea = "1/2/2/4";
 
 
         this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.displayvalue));
