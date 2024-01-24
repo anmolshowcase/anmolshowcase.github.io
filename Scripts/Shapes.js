@@ -29,6 +29,8 @@ pageResized();
 
 //Make Canvas Background COlour to black
 canvas.style.backgroundColor = "Black"; // Set the background color to black
+canvas.style.display = "inline";
+canvas.style.position = "absolute";
 //Remove the default Margin of the body
 document.body.style.margin = 0; // Remove the margin around the canvas
 //remove the scroll
@@ -122,10 +124,16 @@ drawbutton();
 
 
 
-
+const menucontainer = document.createElement("div");
+menucontainer.style.position = "relative";
+menucontainer.style.overflow = "hidden";
+menucontainer.style.width = "100vw";
+menucontainer.style.height = "100vh";
+menucontainer.style.pointerEvents = "none";
 const dropDown = document.createElement("div");
 const dropDownul = document.createElement("ul");
-document.body.appendChild(dropDown);
+document.body.appendChild(menucontainer);
+menucontainer.appendChild(dropDown);
 dropDown.appendChild(dropDownul);
 
 dropDown.style.position = "absolute";
