@@ -5,6 +5,12 @@ let gap = 0;
 let dfc = 0;
 let radius1 = 0;
 let radius2 = 0;
+let Iorien = "h";
+let Forien = "h";
+let controlsTop = "";
+let controlsBottom = "";
+let controlsRight = "";
+let controlsWidth = 0;
 let slideinAnim = '@keyframes slidein{ 0%{transform: translateX(400px);} 100%{transform: translateX(0);}}';
 let slideupAnim = '@keyframes slideup{ 0%{transform: translateY(0);} 100%{transform: translateY(-1000px);}}';
 let buttonfallingAnim = '@keyframes buttonfalling{ 0%{ top: 10px; } 100%{ top: 110vh;}}';
@@ -23,13 +29,54 @@ style.innerHTML += buttonfallingAnim;
 function pageResized() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    Iorien = window.innerWidth<window.innerHeight ? "v":"h";
 }
 
 //Setting the size of the canvas for the first time
 pageResized();
 
+
+function Screenorientation(){
+    Forien = window.innerWidth<window.innerHeight ? "v":"h";
+    if(Forien!=Iorien){
+        Iorien = Forien;
+        console.log("change");
+        change();
+    }
+    console.log(Iorien, Forien);
+}
+
+function change(){
+    if(Iorien=="v"){
+        controlsWidth = 150;
+        controlsTop = "";
+        controlsBottom = "100px";
+        controlsRight = 42;
+        controls.style.top = controlsTop;
+        controls.style.bottom = controlsBottom;
+        console.log("here");
+        controls.style.right = controlsRight+"%";
+        controls.style.width = controlsWidth+"px";
+        controls.style.height = controlsWidth+"px";
+    }
+    else{
+        controlsWidth = 70;
+        controlsTop = "10px";
+        controlsBottom = "";
+        controlsRight = "10px";
+        controlsTranslateY = 0;
+        controls.style.transform = "translate(" + controlsTranslateY + "px, 0px);";
+        controls.style.top = controlsTop;
+        controls.style.bottom = controlsBottom;
+        controls.style.right = controlsRight;
+        controls.style.width = controlsWidth+"px";
+        controls.style.height = controlsWidth+"px";
+    }
+}
+
+
 //Page resized
-//window.onresize = pageResized;
+window.onresize = Screenorientation;
 
 //Make Canvas Background COlour to black
 canvas.style.backgroundColor = "Black"; // Set the background color to black
@@ -44,24 +91,22 @@ document.body.style.overflow = "hidden"; // Make the canvas unscrollable
 let buttonH = Math.floor(Math.random()*360);
 let buttonS = Math.floor(Math.random()*100);
 let buttonL = Math.floor(Math.random()*70)+30;
+
 const controls = document.createElement("button");
 document.body.appendChild(controls);
 controls.style.position = "absolute";
 controls.style.right = "10px";
-controls.style.top = "10px";
 controls.style.backgroundColor = "rgba(0,0,0,0)";
 controls.style.border = "none";
 controls.style.cursor = "pointer";
 controls.style.borderRadius = "50%"
-controls.style.width = "70px";
-controls.style.height = "70px";
 controls.style.padding = "0px";
 controls.style.overflow = "hidden";
 buttongraphics = document.createElement("canvas");
 controls.appendChild(buttongraphics);
 btnctx = buttongraphics.getContext("2d");
-buttongraphics.width = 70;
-buttongraphics.height = 70;
+buttongraphics.width = Iorien=="v"?150:70;
+buttongraphics.height = Iorien=="v"?150:70;
 let buttonsize = buttongraphics.width/2-4;
 //Button Hole masks
 function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
@@ -190,7 +235,10 @@ hideMenuBox.onclick = function() {
     // Unhide the button
     dropDown.style.animation = "slideup 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
     controls.style.display = 'block';
-    controls.style.top = "10px";
+    controls.style.top = controlsTop;
+    controls.style.bottom = controlsBottom;
+    controls.style.right = controlsRight;
+    controls.style.transform = "translateX(" + controlsTranslateY + "px);";
     controls.style.animation = "none";
     dropDown.addEventListener("animationend", (e)=>{
     
@@ -395,3 +443,12 @@ b = new Slider("TEST 2", dropDownul,0,100,100, 1, -100, 200, 100);
 b.init();
 c = new Slider("Working", dropDownul,50,45,23,2,-1000,1000,500);
 c.init();
+
+
+
+
+
+
+
+
+change();
