@@ -29,8 +29,6 @@ pageResized();
 
 //Make Canvas Background COlour to black
 canvas.style.backgroundColor = "Black"; // Set the background color to black
-canvas.style.display = "inline";
-canvas.style.position = "absolute";
 //Remove the default Margin of the body
 document.body.style.margin = 0; // Remove the margin around the canvas
 //remove the scroll
@@ -144,6 +142,7 @@ dropDown.style.color = "rgba(255,0,0,1)";
 dropDown.style.display = "none";
 dropDown.style.width = "20vw";
 dropDown.style.minWidth = "200px";
+dropDown.style.pointerEvents = "all";
 
 dropDownul.style.listStyleType = "none";
 dropDownul.style.padding = 0;
