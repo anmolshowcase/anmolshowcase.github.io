@@ -6,6 +6,8 @@ let dfc = 0;
 let radius1 = 0;
 let radius2 = 0;
 let slideinAnim = '@keyframes slidein{ 0%{transform: translateX(400px);} 100%{transform: translateX(0);}}';
+let slideupAnim = '@keyframes slideup{ 0%{transform: translateY(0);} 100%{transform: translateY(-1000px);}}';
+let buttonfallingAnim = '@keyframes buttonfalling{ 0%{ top: 10px; } 100%{ top: 110vh;}}';
 
 const tau = Math.PI*2;
 const canvas = document.createElement('canvas');
@@ -14,6 +16,8 @@ const ctx = canvas.getContext('2d');
 document.body.appendChild(canvas);
 document.head.appendChild(style);
 style.innerHTML += slideinAnim;
+style.innerHTML += slideupAnim;
+style.innerHTML += buttonfallingAnim;
 
 // Function to update canvas size
 function pageResized() {
@@ -155,21 +159,48 @@ dropDownul.style.gridAutoRows="2fr";
 
 //controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
 controls.onclick = function() {
-    controls.style.transition = "top 1s cubic-bezier(.44,0,.83,.12) 0s";
-    controls.style.top = "110vh"; // Change the value to the desired position
+    //controls.style.transition = "top 1s cubic-bezier(.44,0,.83,.12) 0s";
+    controls.style.animation = "buttonfalling 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
+    //controls.style.top = "110vh"; // Change the value to the desired position
     dropDown.style.display= "block";
     dropDown.style.animation = "slidein 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
     //dropDown.style.transition = "right 2s";
     //dropDown.style.right = "0px"; 
-    controls.addEventListener("transitionend", function() {
+    controls.addEventListener("animationend", function() {
         controls.style.display = "none";
+
     });
 };
 
 
 const menuHeadBox = document.createElement("div");
 dropDownul.appendChild(menuHeadBox);
+menuHeadBox.style.display = "grid";
+menuHeadBox.style.gridTemplateColumns = "8fr 1fr";
+
+
 const hideMenuBox = document.createElement("div");
+menuHeadBox.appendChild(hideMenuBox);
+hideMenuBox.style.background = "blue";
+hideMenuBox.innerHTML = "Hide";
+hideMenuBox.style.gridArea ="1/2/-1/-1";
+hideMenuBox.style.cursor = "pointer";
+hideMenuBox.onclick = function() {
+    // Unhide the button
+    dropDown.style.animation = "slideup 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
+    controls.style.display = 'block';
+    controls.style.top = "10px";
+    controls.style.animation = "none";
+    dropDown.addEventListener("animationend", (e)=>{
+    
+        if(e.animationName === "slideup"){
+            dropDown.style.display = "none";
+
+        }
+        
+    });
+    
+};
 
 
 
@@ -190,11 +221,7 @@ for (var i=0; i<t; i++) {
 ctx.clip();
 ctx.fillStyle = color;
 ctx.fillRect(-canvas.width/2, -canvas.height/2,canvas.width, canvas.height);
-canvas.onclick = function() {
-    // Unhide the button
-    controls.style.display = 'block';
-    controls.style.top = "10px";
-};
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
