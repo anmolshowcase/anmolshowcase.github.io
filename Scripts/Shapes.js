@@ -159,16 +159,17 @@ dropDownul.style.gridAutoRows="2fr";
 
 //controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
 controls.onclick = function() {
-    //controls.style.transition = "top 1s cubic-bezier(.44,0,.83,.12) 0s";
-    controls.style.animation = "buttonfalling 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
-    //controls.style.top = "110vh"; // Change the value to the desired position
+   
     dropDown.style.display= "block";
-    dropDown.style.animation = "slidein 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
-    //dropDown.style.transition = "right 2s";
-    //dropDown.style.right = "0px"; 
+    dropDown.style.animation = "slidein 500ms cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
+    dropDown.addEventListener("animationend",(e=>{
+        if(e.animationName === "slidein"){
+            controls.style.animation = "buttonfalling 1s cubic-bezier(.55,.06,.68,.19) 0s 1 normal both";
+        }
+        
+    }))
     controls.addEventListener("animationend", function() {
         controls.style.display = "none";
-
     });
 };
 
