@@ -299,7 +299,7 @@ class Slider{
         "background: "+this.color+";"+
         "border-radius: 50%;"+
         "border: 2px solid hsl("+this.colorH+" "+this.colorS+"% "+((this.colorL+30)>100?this.colorL-50:100)+"%);"+
-        "box-shadow: -407px 0 0 400px #f50;"+
+        "box-shadow: -407px 0 0 400px "+this.displaycolor+";"+
         "}"
         ;
 
