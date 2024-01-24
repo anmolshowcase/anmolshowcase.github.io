@@ -11,9 +11,15 @@ let controlsTop = "";
 let controlsBottom = "";
 let controlsRight = "";
 let controlsWidth = 0;
+let dropdownBottom = "";
+let dropdownWidth = 0;
+let dropdownTop = "";
+let dropdownRight = "";
+let outerboxGridSize = 0;
 let slideinAnim = '@keyframes slidein{ 0%{transform: translateX(400px);} 100%{transform: translateX(0);}}';
 let slideupAnim = '@keyframes slideup{ 0%{transform: translateY(0);} 100%{transform: translateY(-1000px);}}';
 let buttonfallingAnim = '@keyframes buttonfalling{ 0%{ top: 10px; } 100%{ top: 110vh;}}';
+
 
 const tau = Math.PI*2;
 const canvas = document.createElement('canvas');
@@ -48,10 +54,19 @@ function Screenorientation(){
 
 function change(){
     if(Iorien=="v"){
-        controlsWidth = 150;
+        controlsWidth = 70;
         controlsTop = "";
         controlsBottom = "100px";
         controlsRight = 42;
+        dropdownWidth = "100vw";
+        dropdownBottom = "0";
+        dropdownRight = "0";
+        dropdownTop = "";
+        outerboxGridSize = 30;
+        dropDown.style.width = dropdownWidth;
+        dropDown.style.bottom = dropdownBottom;
+        dropDown.style.right = dropdownRight;
+        dropDown.style.top = dropdownTop;
         controls.style.top = controlsTop;
         controls.style.bottom = controlsBottom;
         console.log("here");
@@ -64,8 +79,15 @@ function change(){
         controlsTop = "10px";
         controlsBottom = "";
         controlsRight = "10px";
-        controlsTranslateY = 0;
-        controls.style.transform = "translate(" + controlsTranslateY + "px, 0px);";
+        dropdownWidth = "20vw";
+        dropdownBottom = "";
+        dropdownRight = "0";
+        dropdownTop = "0";
+        outerboxGridSize = 30;
+        dropDown.style.width = dropdownWidth;
+        dropDown.style.bottom = dropdownBottom;
+        dropDown.style.right = dropdownRight;
+        dropDown.style.top = dropdownTop;
         controls.style.top = controlsTop;
         controls.style.bottom = controlsBottom;
         controls.style.right = controlsRight;
@@ -105,8 +127,8 @@ controls.style.overflow = "hidden";
 buttongraphics = document.createElement("canvas");
 controls.appendChild(buttongraphics);
 btnctx = buttongraphics.getContext("2d");
-buttongraphics.width = Iorien=="v"?150:70;
-buttongraphics.height = Iorien=="v"?150:70;
+buttongraphics.width = 70;
+buttongraphics.height = 70;
 let buttonsize = buttongraphics.width/2-4;
 //Button Hole masks
 function buttonmask(NoOfHoles, distFromCenter,sizeOfHole,sizeOfHole2) {
@@ -186,12 +208,13 @@ menucontainer.appendChild(dropDown);
 dropDown.appendChild(dropDownul);
 
 dropDown.style.position = "absolute";
-dropDown.style.right = "0px";
-dropDown.style.top = "0px";
+dropDown.style.right = dropdownRight;
+dropDown.style.top = dropdownTop;
+dropDown.style.bottom = dropdownBottom;
 dropDown.style.backgroundColor = "rgba(255,255,255,0.2)";
 dropDown.style.color = "rgba(255,0,0,1)";
 dropDown.style.display = "none";
-dropDown.style.width = "20vw";
+dropDown.style.width = dropdownWidth;
 dropDown.style.minWidth = "200px";
 dropDown.style.pointerEvents = "all";
 
@@ -238,7 +261,6 @@ hideMenuBox.onclick = function() {
     controls.style.top = controlsTop;
     controls.style.bottom = controlsBottom;
     controls.style.right = controlsRight;
-    controls.style.transform = "translateX(" + controlsTranslateY + "px);";
     controls.style.animation = "none";
     dropDown.addEventListener("animationend", (e)=>{
     
@@ -304,7 +326,6 @@ class Slider{
         this.inputslider.value = this.defaultValue;
         this.inputvalue = document.createElement("input");
         this.inputvalue.pattern = "[^a-zA-Z]+";
-        //this.inputvalue.type = "number";
         this.displayvalue = document.createElement("span");
         this.displayvalue.innerHTML = this.inputslider.value;
         this.outerbox.appendChild(this.sliderbox);
@@ -325,7 +346,7 @@ class Slider{
         
         this.outerbox.style.display = "grid";
         this.outerbox.style.gridTemplateColumns = "repeat(4, 1fr)";
-        this.outerbox.style.gridTemplateRows = "30px 30px";
+        this.outerbox.style.gridTemplateRows =  outerboxGridSize+"px "+outerboxGridSize+"px";
         this.outerbox.style.background = this.color;
         this.outerbox.style.paddingTop = "6px";
         this.sliderbox.style.gridArea = "2/1/3/5";
@@ -366,8 +387,9 @@ class Slider{
         this.displayvalue.addEventListener("mouseover", ()=>this.overvalue(this.displayvalue));
         this.displayvalue.addEventListener("mouseout", ()=>this.outvalue(this.displayvalue));
         this.displayvalue.addEventListener("click", ()=>this.clickvalue(this.displayvalue, this.inputvalue, this.inputslider.value));
-        this.inputvalue.addEventListener("focusout", ()=>this.valuentered(this.inputvalue, this.displayvalue,this.inputslider));
+        this.inputvalue.addEventListener("focusout", (e)=>{this.valuentered(this.inputvalue, this.displayvalue,this.inputslider,e);});
         this.inputslider.addEventListener("input", ()=>this.valuechanged(this.displayvalue,this.inputslider));
+        this.inputvalue.addEventListener("keypress", (e)=>{this.valuentered(this.inputvalue, this.displayvalue,this.inputslider,e);});
     }
     sliderstyle(){
         //let l = (this.colorL+30)>100?this.colorL-50:100;
@@ -419,14 +441,15 @@ class Slider{
         b.value = value;
         b.select();
     }
-    valuentered(a,b,c){
-        b.style.display = "block";
-        a.style.display = "none";
-        let value = parseFloat(a.value);
-        console.log(b.value);
-        if (!isNaN(value)) {
-            c.value = value;
-            this.valuechanged(b,c);
+    valuentered(a,b,c,e){
+        if(e.type == "focusout"||e.keyCode == 13){
+            b.style.display = "block";
+            a.style.display = "none";
+            let value = parseFloat(a.value);
+            if (!isNaN(value)) {
+                c.value = value;
+                this.valuechanged(b,c);
+            }
         }
     }
     valuechanged(a,b){
@@ -434,6 +457,17 @@ class Slider{
     }
 
 }
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+change();
+/////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -443,12 +477,3 @@ b = new Slider("TEST 2", dropDownul,0,100,100, 1, -100, 200, 100);
 b.init();
 c = new Slider("Working", dropDownul,50,45,23,2,-1000,1000,500);
 c.init();
-
-
-
-
-
-
-
-
-change();
