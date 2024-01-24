@@ -5,13 +5,15 @@ let gap = 0;
 let dfc = 0;
 let radius1 = 0;
 let radius2 = 0;
+let slideinAnim = '@keyframes slidein{ 0%{transform: translateX(400px);} 100%{transform: translateX(0);}}';
 
 const tau = Math.PI*2;
 const canvas = document.createElement('canvas');
 const style = document.createElement('style');
 const ctx = canvas.getContext('2d');
 document.body.appendChild(canvas);
-document.body.appendChild(style);
+document.head.appendChild(style);
+style.innerHTML += slideinAnim;
 
 // Function to update canvas size
 function pageResized() {
@@ -92,26 +94,32 @@ function initButton(){
     console.log("gap: "+gap+" dfc: "+dfc+" radius: "+radius1+" radius2: "+radius2, buttongraphics.width/2);
     console.log(choice.length, number);
 }
-initButton();
-color = "hsla("+buttonH+","+buttonS+"%,"+buttonL+"%,1)";
-btnctx.fillStyle = color;
-btnctx.translate(buttongraphics.width/2,buttongraphics.height/2);
-btnctx.beginPath();
-btnctx.shadowColor = "hsla("+buttonH+","+buttonS+"%,"+(buttonL-29)+"%,1)";
-btnctx.shadowOffsetX = 3;
-btnctx.shadowOffsetY = 3;
-btnctx.moveTo(0,0);
-btnctx.arc(0,0,buttonsize,0,tau);
-btnctx.fill();
 
-btnctx.shadowOffsetX = -2;
-btnctx.shadowOffsetY = -2;
-//btnctx.shadowBlur = 2;
-btnctx.fillStyle = "rgba(255,255,255,0.4)";
-btnctx.moveTo(0,0);
-btnctx.beginPath();
-btnctx.arc(1,1,buttonsize-gap,0,tau);
-btnctx.fill();
+function drawbutton(){
+    btnctx.clearRect(0, 0, buttongraphics.width, buttongraphics.height);
+    color = "hsla("+buttonH+","+buttonS+"%,"+buttonL+"%,1)";
+    btnctx.fillStyle = color;
+    btnctx.translate(buttongraphics.width/2,buttongraphics.height/2);
+    btnctx.beginPath();
+    btnctx.shadowColor = "hsla("+buttonH+","+buttonS+"%,"+(buttonL-29)+"%,1)";
+    btnctx.shadowOffsetX = 3;
+    btnctx.shadowOffsetY = 3;
+    btnctx.moveTo(0,0);
+    btnctx.arc(0,0,buttonsize,0,tau);
+    btnctx.fill();
+
+    btnctx.shadowOffsetX = -2;
+    btnctx.shadowOffsetY = -2;
+    //btnctx.shadowBlur = 2;
+    btnctx.fillStyle = "rgba(255,255,255,0.4)";
+    btnctx.moveTo(0,0);
+    btnctx.beginPath();
+    btnctx.arc(1,1,buttonsize-gap,0,tau);
+    btnctx.fill();
+}
+initButton();
+drawbutton();
+
 
 
 
@@ -121,8 +129,8 @@ document.body.appendChild(dropDown);
 dropDown.appendChild(dropDownul);
 
 dropDown.style.position = "absolute";
-dropDown.style.right = "10px";
-dropDown.style.top = "30px";
+dropDown.style.right = "0px";
+dropDown.style.top = "0px";
 dropDown.style.backgroundColor = "rgba(255,255,255,0.2)";
 dropDown.style.color = "rgba(255,0,0,1)";
 dropDown.style.display = "none";
@@ -140,24 +148,19 @@ dropDownul.style.gridAutoRows="2fr";
 controls.onclick = function() {
     controls.style.transition = "top 1s cubic-bezier(.44,0,.83,.12) 0s";
     controls.style.top = "110vh"; // Change the value to the desired position
-    dropDown.style.display = dropDown.style.display === 'none'?'block':'none';
+    dropDown.style.display= "block";
+    dropDown.style.animation = "slidein 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
+    //dropDown.style.transition = "right 2s";
+    //dropDown.style.right = "0px"; 
     controls.addEventListener("transitionend", function() {
         controls.style.display = "none";
-      });
-    };
-
-const dropDownli = document.createElement("li");
-dropDownli.innerHTML = "testing with some extra long strings";
-
-dropDownul.appendChild(dropDownli);
-
-dropDownli.style.padding = "5px";
-dropDownli.onmouseover = function() {dropDown.style.backgroundColor = "rgba(100,100,100,1)";};
-dropDownli.onmouseout = function() {dropDown.style.backgroundColor = "rgba("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+",1)";};
+    });
+};
 
 
-
-
+const menuHeadBox = document.createElement("div");
+dropDownul.appendChild(menuHeadBox);
+const hideMenuBox = document.createElement("div");
 
 
 
@@ -353,3 +356,5 @@ a = new Slider("TEST", dropDownul);
 a.init();
 b = new Slider("TEST 2", dropDownul,0,100,100, 1, -100, 200, 100);
 b.init();
+c = new Slider("Working", dropDownul,50,45,23,2,-1000,1000,500);
+c.init();
