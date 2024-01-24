@@ -29,6 +29,8 @@ pageResized();
 
 //Make Canvas Background COlour to black
 canvas.style.backgroundColor = "Black"; // Set the background color to black
+canvas.style.display = "inline";
+canvas.style.position = "absolute";
 //Remove the default Margin of the body
 document.body.style.margin = 0; // Remove the margin around the canvas
 //remove the scroll
