@@ -274,6 +274,11 @@ arrow.closePath();
 
 
 function hideButtoncreate(){
+    console.log(Iorien);
+    if(Iorien=="v"){
+        hbctx.rotate(Math.PI);
+        hbctx.translate(-hbwidth,-hbheight);
+    }
     hbctx.fillStyle="hsl(0,0%,40%)";
     hbctx.fillRect(0,0,hbwidth,hbheight);
     hbctx.fillStyle = "hsl(0,0%,0%)";
@@ -301,6 +306,10 @@ function overhidebutton(e){
 }
 
 function animatehb(){
+    if(Iorien=="v"){
+        hbctx.rotate(Math.PI);
+        hbctx.translate(-hbwidth,-hbheight);
+    }
     hbctx.fillStyle="hsl(0,0%,40%)";
     hbctx.fillRect(0,0,hbwidth,hbheight);
     hbctx.fillStyle = "hsl(0,0%,"+hbcounter+"%)";
