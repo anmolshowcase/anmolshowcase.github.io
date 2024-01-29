@@ -250,10 +250,71 @@ menuHeadBox.style.gridTemplateColumns = "8fr 1fr";
 
 const hideMenuBox = document.createElement("div");
 menuHeadBox.appendChild(hideMenuBox);
-hideMenuBox.style.background = "blue";
-hideMenuBox.innerHTML = "Hide";
+hideMenuBox.style.background = "hsl(0,0%,60%)";
+hideMenuBox.style.padding = "2px";
+hidebuttonCanvas = document.createElement("canvas");
+hidebuttonCanvas.style.width = "100%";
+hidebuttonCanvas.style.height = "100%";
+hbwidth = hidebuttonCanvas.width;
+hbheight = hidebuttonCanvas.height;
+const hbctx = hidebuttonCanvas.getContext("2d");
+hideMenuBox.appendChild(hidebuttonCanvas);
+
+
+
 hideMenuBox.style.gridArea ="1/2/-1/-1";
 hideMenuBox.style.cursor = "pointer";
+
+
+let arrow = new Path2D();
+arrow.moveTo(0,hbheight*2/3);
+arrow.lineTo(hbwidth/2,0);
+arrow.lineTo(hidebuttonCanvas.width,hbheight*2/3);
+arrow.closePath();
+
+
+function hideButtoncreate(){
+    hbctx.fillStyle="hsl(0,0%,40%)";
+    hbctx.fillRect(0,0,hbwidth,hbheight);
+    hbctx.fillStyle = "hsl(0,0%,0%)";
+    hbctx.fill(arrow);
+    hbctx.translate(0,hbheight*2/3);
+    hbctx.fill(arrow);
+    hbctx.setTransform(1,0,0,1,1,1);
+}
+hideButtoncreate();
+let hbcounter = 0;
+let checkhb = false;
+hidebuttonCanvas.addEventListener("mouseover", (e)=>overhidebutton(e.type));
+hidebuttonCanvas.addEventListener("mouseout", (e)=>overhidebutton(e.type));
+function overhidebutton(e){
+    if(e=="mouseover"){
+        checkhb =true;
+        id = setInterval(animatehb, 1);
+    }
+    else{
+        hbcounter=0;
+        clearInterval(id);
+        hideButtoncreate();
+    }
+
+}
+
+function animatehb(){
+    hbctx.fillStyle="hsl(0,0%,40%)";
+    hbctx.fillRect(0,0,hbwidth,hbheight);
+    hbctx.fillStyle = "hsl(0,0%,"+hbcounter+"%)";
+    hbctx.translate(0,-(hbcounter%(hbheight*2/3)));
+    hbctx.fill(arrow);
+    hbctx.translate(0,hbheight*2/3);
+    hbctx.fill(arrow);
+    hbctx.translate(0,hbheight*2/3);
+    hbctx.fill(arrow);
+    hbctx.setTransform(1,0,0,1,1,1);
+    hbcounter++;
+}
+
+
 hideMenuBox.onclick = function() {
     // Unhide the button
     dropDown.style.animation = "slideup 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
@@ -477,3 +538,5 @@ b = new Slider("TEST 2", dropDownul,0,100,100, 1, -100, 200, 100);
 b.init();
 c = new Slider("Working", dropDownul,50,45,23,2,-1000,1000,500);
 c.init();
+
+
