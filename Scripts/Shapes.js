@@ -69,10 +69,13 @@ function change(){
         dropDown.style.top = dropdownTop;
         controls.style.top = controlsTop;
         controls.style.bottom = controlsBottom;
-        console.log("here");
         controls.style.right = controlsRight+"%";
         controls.style.width = controlsWidth+"px";
         controls.style.height = controlsWidth+"px";
+        AddMenuBox.style.top = "";
+        AddMenuBox.style.bottom = dropDown.offsetHeight+"px";
+        AddMenuBox.style.left ="0";
+        AddMenuBox.style.right = "";
     }
     else{
         controlsWidth = 70;
@@ -93,6 +96,11 @@ function change(){
         controls.style.right = controlsRight;
         controls.style.width = controlsWidth+"px";
         controls.style.height = controlsWidth+"px";
+        AddMenuBox.style.top = "0";
+        AddMenuBox.style.bottom = "";
+        AddMenuBox.style.left ="";
+        AddMenuBox.style.right = (dropDown.offsetWidth+2)+"px";
+
     }
 }
 
@@ -199,7 +207,8 @@ const menucontainer = document.createElement("div");
 menucontainer.style.position = "relative";
 menucontainer.style.overflow = "hidden";
 menucontainer.style.width = "100vw";
-menucontainer.style.height = "100vh";
+menucontainer.style.height = "100dvh";
+menucontainer.style.minHeight = "100%";
 menucontainer.style.pointerEvents = "none";
 const dropDown = document.createElement("div");
 const dropDownul = document.createElement("ul");
@@ -365,13 +374,101 @@ CreateMenuBox.appendChild(CreatebuttonCanvas);
 
 CreateMenuBox.style.gridArea ="1/1/1/2";
 CreateMenuBox.style.cursor = "pointer";
-
+CreateMenuBox.addEventListener("click", Addclicked);
 
 Crtctx.fillStyle="hsl(0,0%,40%)";
 Crtctx.fillRect(0,0,Crtwidth,Crtheight);
 Crtctx.fillStyle="hsl(0,0%,100%)";
 Crtctx.fillRect(Crtwidth/2-Crtwidth/12,Crtheight*0.1,Crtwidth/6,Crtheight*0.8);
 Crtctx.fillRect(Crtwidth*0.1,Crtheight/2-Crtheight/12,Crtwidth*0.8,Crtheight/6);
+Crtctx.lineCap="butt";
+
+function Addclicked(){
+    change();
+    checkaddmenu = AddMenuBox.style.display;
+    if(checkaddmenu=="none"){
+        AddMenuBox.style.display = "inline";
+        Crtctx.fillStyle="hsl(0,0%,40%)";
+        Crtctx.fillRect(0,0,Crtwidth,Crtheight);
+        Crtctx.translate(Crtwidth/2,Crtheight/2);
+        Crtctx.strokeStyle="hsl(0,0%,100%)";
+        Crtctx.lineWidth=25;
+        s = 0.6;
+        Crtctx.moveTo(Crtwidth*s/2,Crtheight*s/2);
+        Crtctx.lineTo(-Crtwidth*s/2,-Crtheight*s/2);
+        Crtctx.moveTo(Crtwidth*s/2,-Crtheight*s/2);
+        Crtctx.lineTo(-Crtwidth*s/2,Crtheight*s/2);
+        Crtctx.stroke();
+        Crtctx.setTransform(1,0,0,1,1,1);
+    }
+    else{
+        AddMenuBox.style.display = "none";
+        Crtctx.fillStyle="hsl(0,0%,40%)";
+        Crtctx.fillRect(0,0,Crtwidth,Crtheight);
+        Crtctx.fillStyle="hsl(0,0%,100%)";
+        Crtctx.fillRect(Crtwidth/2-Crtwidth/12,Crtheight*0.1,Crtwidth/6,Crtheight*0.8);
+        Crtctx.fillRect(Crtwidth*0.1,Crtheight/2-Crtheight/12,Crtwidth*0.8,Crtheight/6);
+    }
+}
+
+let addmenuitems = ["Box", "Line", "Circle"];
+let items = [];
+let AddMenuBox = document.createElement("div");
+document.body.appendChild(AddMenuBox);
+AddMenuBox.style.position="absolute";
+AddMenuBox.style.top="0";
+AddMenuBox.style.display="none";
+AddMenuBox.style.color="rgba(255,255,255,1)";
+AddMenuBox.style.background = "white";
+AddMenuBox.style.border = "1px solid black";
+AddMenuBox.style.textAlign="center";
+AddMenuBox.style.overflow = "scroll";
+AddMenuBox.style.maxHeight = "100px";
+
+
+
+
+class AddMenuitem{
+    constructor(name = "okay"){
+        this.Name = name;
+    }
+    init(){
+        this.item = document.createElement("div");
+        this.item.className = "add";
+        this.item.innerHTML = this.Name;
+        this.item.style.border = "1px black dashed";
+        this.item.style.background = "grey";
+        this.item.style.padding = "5px";
+        this.item.style.minWidth = "70px";    
+        AddMenuBox.appendChild(this.item);
+
+
+        this.item.addEventListener("click",()=>this.itemclicked(this.Name));
+        this.item.addEventListener("mouseenter",()=>this.overitem(this.item));
+        this.item.addEventListener("mouseleave",()=>this.outitem(this.item));
+    }
+    itemclicked(a){
+        console.log(a);
+    }
+    overitem(a){
+        a.style.background = "red";
+    }
+    outitem(a){
+        a.style.background = "grey";
+    }
+    menu(){
+        return this.item;
+    }
+}
+
+
+addbox = new AddMenuitem("Box");
+addbox.init();
+addline = new AddMenuitem("Line");
+addline.init();
+addcircle = new AddMenuitem("Circle");
+addcircle.init();
+
 
 
 
