@@ -1,4 +1,5 @@
 //Canvas Creation
+let layers = ["BackGround"];
 let choice = [2,2,2,3,4,4,4,4,5,5];
 let number = 0;
 let gap = 0;
@@ -81,9 +82,18 @@ function change(){
         controls.style.width = controlsWidth+"px";
         controls.style.height = controlsWidth+"px";
         AddMenuBox.style.top = "";
-        AddMenuBox.style.bottom = dropDown.offsetHeight+"px";
+        AddMenuBox.style.bottom = (dropDown.offsetHeight+2)+"px";
         AddMenuBox.style.left ="0";
         AddMenuBox.style.right = "";
+        modifierMenuBox.style.top = "";
+        modifierMenuBox.style.bottom = (dropDown.offsetHeight+2)+"px";
+        modifierMenuBox.style.left ="0";
+        modifierMenuBox.style.right = "";
+        layerMenuBox.style.top = "";
+        layerMenuBox.style.bottom = (dropDown.offsetHeight+2)+"px";
+        layerMenuBox.style.left ="";
+        layerMenuBox.style.right = nameBox.offsetLeft+"px";
+        layerMenuBox.style.width = nameBox.offsetWidth + "px";
     }
     else{
         controlsWidth = 70;
@@ -110,6 +120,15 @@ function change(){
         AddMenuBox.style.bottom = "";
         AddMenuBox.style.left ="";
         AddMenuBox.style.right = (dropDown.offsetWidth+2)+"px";
+        modifierMenuBox.style.top = "0";
+        modifierMenuBox.style.bottom = "";
+        modifierMenuBox.style.left ="";
+        modifierMenuBox.style.right = (dropDown.offsetWidth+2)+"px";
+        layerMenuBox.style.top = nameBox.offsetHeight-2 + "px";
+        layerMenuBox.style.bottom = "";
+        layerMenuBox.style.left ="";
+        layerMenuBox.style.right = nameBox.offsetLeft+"px";
+        layerMenuBox.style.width = nameBox.offsetWidth + "px";
 
     }
 }
@@ -283,6 +302,7 @@ hideMenuBox.appendChild(hidebuttonCanvas);
 
 
 hideMenuBox.style.gridArea ="1/5/-1/-1";
+hideMenuBox.style.height = "35px";
 hideMenuBox.style.cursor = "pointer";
 
 
@@ -384,6 +404,7 @@ editMenuBox.appendChild(editbuttonCanvas);
 
 
 editMenuBox.style.gridArea ="1/4/2/5";
+editMenuBox.style.height = "35px";
 editMenuBox.style.cursor = "pointer";
 
 edtctx.fillStyle = "hsl(0,0%,40%)";
@@ -476,6 +497,7 @@ modMenuBox.appendChild(modbuttonCanvas);
 
 
 modMenuBox.style.gridArea ="1/2/2/3";
+modMenuBox.style.height = "35px";
 modMenuBox.style.cursor = "pointer";
 
 
@@ -504,6 +526,8 @@ for(i=0;i<=6;i++){
 }
 modctx.fill();
 
+modMenuBox.addEventListener("click",modclicked);
+
 
 
 const CreateMenuBox = document.createElement("div");
@@ -521,7 +545,10 @@ CreateMenuBox.appendChild(CreatebuttonCanvas);
 
 
 CreateMenuBox.style.gridArea ="1/1/1/2";
+CreateMenuBox.style.height = "35px";
 CreateMenuBox.style.cursor = "pointer";
+
+
 CreateMenuBox.addEventListener("click", Addclicked);
 
 Crtctx.fillStyle="hsl(0,0%,40%)";
@@ -535,6 +562,8 @@ function Addclicked(){
     change();
     checkaddmenu = AddMenuBox.style.display;
     if(checkaddmenu=="none"){
+        layerMenuBox.style.display = "none";
+        modifierMenuBox.style.display="none";
         AddMenuBox.style.display = "inline";
         Crtctx.fillStyle="hsl(0,0%,40%)";
         Crtctx.fillRect(0,0,Crtwidth,Crtheight);
@@ -560,7 +589,6 @@ function Addclicked(){
 }
 
 let addmenuitems = ["Box", "Line", "Circle"];
-let items = [];
 let AddMenuBox = document.createElement("div");
 document.body.appendChild(AddMenuBox);
 AddMenuBox.style.position="absolute";
@@ -631,9 +659,10 @@ const nameBox = document.createElement("div");
 menuHeadBox.appendChild(nameBox);
 nameBox.style.background = "hsl(0,0%,60%)";
 nameBox.style.padding = "2px";
+nameBox.style.height = "35px";
 nameBox.style.gridArea ="1/3/2/4";
 nameBox.style.cursor = "pointer";
-nametag = document.createElement("div");
+const nametag = document.createElement("div");
 nameBox.appendChild(nametag);
 nametag.style.background = "hsl(0,0%,40%)";
 nametag.style.width = "100%";
@@ -643,10 +672,163 @@ nametag.style.textAlign = "center";
 nametag.style.paddingTop = "5px";
 nametag.innerHTML = "BackGround";
 nametag.style.userSelect = "none";
+nameBox.addEventListener("click", layerclicked);
+
+
+const modifierMenuBox = document.createElement("div");
+document.body.appendChild(modifierMenuBox);
+modifierMenuBox.style.position="absolute";
+modifierMenuBox.style.top="0";
+modifierMenuBox.style.display="none";
+modifierMenuBox.style.color="rgba(255,255,255,1)";
+modifierMenuBox.style.background = "white";
+modifierMenuBox.style.border = "1px solid black";
+modifierMenuBox.style.textAlign="center";
+modifierMenuBox.style.overflow = "scroll";
+modifierMenuBox.style.maxHeight = "100px";
+modifierMenuBox.style.cursor = "pointer";
 
 
 
 
+
+class modMenuitem{
+    constructor(name = "okay"){
+        this.Name = name;
+    }
+    init(){
+        this.item = document.createElement("div");
+        this.item.className = "add";
+        this.item.innerHTML = this.Name;
+        this.item.style.border = "1px black dashed";
+        this.item.style.background = "grey";
+        this.item.style.padding = "5px";
+        this.item.style.minWidth = "70px";    
+        modifierMenuBox.appendChild(this.item);
+
+
+        this.item.addEventListener("click",()=>this.itemclicked(this.Name));
+        this.item.addEventListener("mouseenter",()=>this.overitem(this.item));
+        this.item.addEventListener("mouseleave",()=>this.outitem(this.item));
+    }
+    itemclicked(a){
+        console.log(a);
+        modclicked();
+    }
+    overitem(a){
+        a.style.background = "red";
+    }
+    outitem(a){
+        a.style.background = "grey";
+    }
+    menu(){
+        return this.item;
+    }
+}
+
+
+function modclicked(){
+    change();
+    checkmodmenu = modifierMenuBox.style.display;
+    if(checkmodmenu=="none"){
+        layerMenuBox.style.display = "none";
+        if(AddMenuBox.style.display!="none"){
+            Addclicked();
+        }
+        modifierMenuBox.style.display = "inline";
+    }
+    else{
+        modifierMenuBox.style.display = "none";
+    }
+}
+
+duplicatemod = new modMenuitem("Duplicate");
+arraymod = new modMenuitem("Array");
+deletemod = new modMenuitem("Delete");
+moveupmod = new modMenuitem("Move Up");
+movedownmod = new modMenuitem("Move Down");
+mergemod = new modMenuitem("Merge");
+duplicatemod.init();
+arraymod.init();
+deletemod.init();
+moveupmod.init();
+movedownmod.init();
+mergemod.init();
+
+
+
+
+
+
+
+
+const layerMenuBox = document.createElement("div");
+document.body.appendChild(layerMenuBox);
+layerMenuBox.style.position="absolute";
+layerMenuBox.style.top="0";
+layerMenuBox.style.display="none";
+layerMenuBox.style.color="rgba(255,255,255,1)";
+layerMenuBox.style.background = "white";
+layerMenuBox.style.border = "1px solid black";
+layerMenuBox.style.textAlign="center";
+layerMenuBox.style.overflow = "scroll";
+layerMenuBox.style.maxHeight = "100px";
+layerMenuBox.style.cursor = "pointer";
+
+
+
+
+
+class layer{
+    constructor(name = "okay"){
+        this.Name = name;
+    }
+    init(){
+        this.item = document.createElement("div");
+        this.item.className = "add";
+        this.item.innerHTML = this.Name;
+        this.item.style.border = "1px black dashed";
+        this.item.style.background = "grey";
+        this.item.style.padding = "5px";
+        this.item.style.minWidth = "70px";    
+        layerMenuBox.appendChild(this.item);
+
+
+        this.item.addEventListener("click",()=>this.itemclicked(this.Name));
+        this.item.addEventListener("mouseenter",()=>this.overitem(this.item));
+        this.item.addEventListener("mouseleave",()=>this.outitem(this.item));
+    }
+    itemclicked(a){
+        console.log(a);
+        layerclicked();
+    }
+    overitem(a){
+        a.style.background = "red";
+    }
+    outitem(a){
+        a.style.background = "grey";
+    }
+    menu(){
+        return this.item;
+    }
+}
+
+function layerclicked(){
+    change();
+    checkmodmenu = layerMenuBox.style.display;
+    if(checkmodmenu=="none"){
+        if(AddMenuBox.style.display!="none"){
+            Addclicked();
+        }
+        modifierMenuBox.style.display = "none";
+        layerMenuBox.style.display = "inline";
+    }
+    else{
+        layerMenuBox.style.display = "none";
+    }
+}
+bhas = new layer("test");
+bhas.init();
 ///////////////////////////////////////////////////////////////////////////////
 
 
