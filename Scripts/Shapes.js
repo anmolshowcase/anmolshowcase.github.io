@@ -209,7 +209,7 @@ dropDown.appendChild(dropDownul);
 
 dropDown.style.position = "absolute";
 dropDown.style.right = dropdownRight;
-dropDown.style.top = dropdownTop;
+dropDown.style.top = dropdownTop; 
 dropDown.style.bottom = dropdownBottom;
 dropDown.style.backgroundColor = "rgba(255,255,255,0.2)";
 dropDown.style.color = "rgba(255,0,0,1)";
@@ -222,7 +222,7 @@ dropDownul.style.listStyleType = "none";
 dropDownul.style.padding = 0;
 dropDownul.style.margin = 0;
 dropDownul.style.display="grid";
-dropDownul.style.gridTemplateRows="1fr";
+dropDownul.style.gridTemplateRows="35px";
 dropDownul.style.gridAutoRows="2fr";
 
 //controls.onclick = function() {dropDown.style.display = dropDown.style.display === 'none'?'block':'none';};
@@ -245,7 +245,7 @@ controls.onclick = function() {
 const menuHeadBox = document.createElement("div");
 dropDownul.appendChild(menuHeadBox);
 menuHeadBox.style.display = "grid";
-menuHeadBox.style.gridTemplateColumns = "8fr 1fr";
+menuHeadBox.style.gridTemplateColumns = "35px 1fr 35px";
 
 
 const hideMenuBox = document.createElement("div");
@@ -262,7 +262,7 @@ hideMenuBox.appendChild(hidebuttonCanvas);
 
 
 
-hideMenuBox.style.gridArea ="1/2/-1/-1";
+hideMenuBox.style.gridArea ="1/3/-1/-1";
 hideMenuBox.style.cursor = "pointer";
 
 
@@ -271,6 +271,9 @@ arrow.moveTo(0,hbheight*2/3);
 arrow.lineTo(hbwidth/2,0);
 arrow.lineTo(hidebuttonCanvas.width,hbheight*2/3);
 arrow.closePath();
+
+
+
 
 
 function hideButtoncreate(){
@@ -343,6 +346,32 @@ hideMenuBox.onclick = function() {
     
 };
 
+
+
+
+const CreateMenuBox = document.createElement("div");
+menuHeadBox.appendChild(CreateMenuBox);
+CreateMenuBox.style.background = "hsl(0,0%,60%)";
+CreateMenuBox.style.padding = "2px";
+CreatebuttonCanvas = document.createElement("canvas");
+CreatebuttonCanvas.style.width = "100%";
+CreatebuttonCanvas.style.height = "100%";
+Crtwidth = CreatebuttonCanvas.width;
+Crtheight = CreatebuttonCanvas.height;
+const Crtctx = CreatebuttonCanvas.getContext("2d");
+CreateMenuBox.appendChild(CreatebuttonCanvas);
+
+
+
+CreateMenuBox.style.gridArea ="1/1/1/2";
+CreateMenuBox.style.cursor = "pointer";
+
+
+Crtctx.fillStyle="hsl(0,0%,40%)";
+Crtctx.fillRect(0,0,Crtwidth,Crtheight);
+Crtctx.fillStyle="hsl(0,0%,100%)";
+Crtctx.fillRect(Crtwidth/2-Crtwidth/12,Crtheight*0.1,Crtwidth/6,Crtheight*0.8);
+Crtctx.fillRect(Crtwidth*0.1,Crtheight/2-Crtheight/12,Crtwidth*0.8,Crtheight/6);
 
 
 
