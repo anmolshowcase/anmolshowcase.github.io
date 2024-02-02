@@ -16,7 +16,11 @@ let dropdownWidth = 0;
 let dropdownTop = "";
 let dropdownRight = "";
 let outerboxGridSize = 0;
+let menuanimin = "slidein";
+let menuanimout = "Vslideup";
 let slideinAnim = '@keyframes slidein{ 0%{transform: translateX(400px);} 100%{transform: translateX(0);}}';
+let VslideupAnim = '@keyframes Vslideup{ 0%{transform: translateY(400px);} 100%{transform: translateY(0);}}';
+let VslidedownAnim = '@keyframes Vslidedown{ 0%{transform: translateY(0px);} 100%{transform: translateY(500px);}}';
 let slideupAnim = '@keyframes slideup{ 0%{transform: translateY(0);} 100%{transform: translateY(-1000px);}}';
 let buttonfallingAnim = '@keyframes buttonfalling{ 0%{ top: 10px; } 100%{ top: 110vh;}}';
 
@@ -30,6 +34,8 @@ document.head.appendChild(style);
 style.innerHTML += slideinAnim;
 style.innerHTML += slideupAnim;
 style.innerHTML += buttonfallingAnim;
+style.innerHTML += VslideupAnim;
+style.innerHTML += VslidedownAnim;
 
 // Function to update canvas size
 function pageResized() {
@@ -63,6 +69,8 @@ function change(){
         dropdownRight = "0";
         dropdownTop = "";
         outerboxGridSize = 30;
+        menuanimin = "Vslideup";
+        menuanimout = "Vslidedown";
         dropDown.style.width = dropdownWidth;
         dropDown.style.bottom = dropdownBottom;
         dropDown.style.right = dropdownRight;
@@ -87,6 +95,8 @@ function change(){
         dropdownRight = "0";
         dropdownTop = "0";
         outerboxGridSize = 30;
+        menuanimin = "slidein";
+        menuanimout = "slideup";
         dropDown.style.width = dropdownWidth;
         dropDown.style.bottom = dropdownBottom;
         dropDown.style.right = dropdownRight;
@@ -238,7 +248,7 @@ dropDownul.style.gridAutoRows="2fr";
 controls.onclick = function() {
    
     dropDown.style.display= "block";
-    dropDown.style.animation = "slidein 500ms cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
+    dropDown.style.animation = menuanimin+" 500ms cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
     dropDown.addEventListener("animationend",(e=>{
         if(e.animationName === "slidein"){
             controls.style.animation = "buttonfalling 1s cubic-bezier(.55,.06,.68,.19) 0s 1 normal both";
@@ -254,7 +264,8 @@ controls.onclick = function() {
 const menuHeadBox = document.createElement("div");
 dropDownul.appendChild(menuHeadBox);
 menuHeadBox.style.display = "grid";
-menuHeadBox.style.gridTemplateColumns = "35px 1fr 35px";
+menuHeadBox.style.gridTemplateColumns = "35px 35px 1fr 35px 35px";
+menuHeadBox.style.columnGap = "2px";
 
 
 const hideMenuBox = document.createElement("div");
@@ -262,8 +273,8 @@ menuHeadBox.appendChild(hideMenuBox);
 hideMenuBox.style.background = "hsl(0,0%,60%)";
 hideMenuBox.style.padding = "2px";
 hidebuttonCanvas = document.createElement("canvas");
-hidebuttonCanvas.style.width = "100%";
-hidebuttonCanvas.style.height = "100%";
+hidebuttonCanvas.style.width = "31px";
+hidebuttonCanvas.style.height = "31px";
 hbwidth = hidebuttonCanvas.width;
 hbheight = hidebuttonCanvas.height;
 const hbctx = hidebuttonCanvas.getContext("2d");
@@ -271,7 +282,7 @@ hideMenuBox.appendChild(hidebuttonCanvas);
 
 
 
-hideMenuBox.style.gridArea ="1/3/-1/-1";
+hideMenuBox.style.gridArea ="1/5/-1/-1";
 hideMenuBox.style.cursor = "pointer";
 
 
@@ -338,7 +349,7 @@ function animatehb(){
 
 hideMenuBox.onclick = function() {
     // Unhide the button
-    dropDown.style.animation = "slideup 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
+    dropDown.style.animation = menuanimout+" 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
     controls.style.display = 'block';
     controls.style.top = controlsTop;
     controls.style.bottom = controlsBottom;
@@ -358,13 +369,150 @@ hideMenuBox.onclick = function() {
 
 
 
+const editMenuBox = document.createElement("div");
+menuHeadBox.appendChild(editMenuBox);
+editMenuBox.style.background = "hsl(0,0%,60%)";
+editMenuBox.style.padding = "2px";
+editbuttonCanvas = document.createElement("canvas");
+editbuttonCanvas.style.width = "31px";
+editbuttonCanvas.style.height = "31px";
+edtwidth = editbuttonCanvas.width;
+edtheight = editbuttonCanvas.height;
+const edtctx = editbuttonCanvas.getContext("2d");
+editMenuBox.appendChild(editbuttonCanvas);
+
+
+
+editMenuBox.style.gridArea ="1/4/2/5";
+editMenuBox.style.cursor = "pointer";
+
+edtctx.fillStyle = "hsl(0,0%,40%)";
+edtctx.fillRect(0,0,edtwidth,edtheight);
+edtctx.lineWidth = 10;
+edtctx.beginPath();
+edtctx.rect(20,edtheight/2-25,edtwidth-40,50);
+edtctx.moveTo(70,edtheight/2+10);
+edtctx.lineTo(70,edtheight/2-10);
+edtctx.stroke();
+edtctx.lineWidth = 5;
+edtctx.moveTo(85,edtheight/2-10);
+edtctx.lineTo(55,edtheight/2-10);
+edtctx.stroke();
+edtctx.fillRect(100,0,50,edtheight);
+edtctx.strokeStyle = "white";
+edtctx.beginPath();
+edtctx.moveTo(140,30);
+edtctx.lineTo(110,30);
+edtctx.moveTo(140,edtheight-30);
+edtctx.lineTo(110,edtheight-30);
+edtctx.moveTo(125,30);
+edtctx.lineTo(125,edtheight-30);
+edtctx.stroke();
+
+
+
+
+
+let editname = true;
+editMenuBox.addEventListener("click",clickedit);
+function clickedit(){
+    if(editname){
+        editname = false;
+        edtctx.fillStyle = "hsl(0,0%,40%)";
+        edtctx.fillRect(0,0,edtwidth,edtheight);
+        edtctx.strokeStyle = "hsl(120,50%,50%)";
+        edtctx.beginPath();
+        edtctx.lineWidth=30;
+        edtctx.moveTo(50,edtheight/2+20);
+        edtctx.lineTo(edtwidth/2,edtheight-30);
+        edtctx.lineTo(edtwidth-20,20);
+        edtctx.stroke();
+    }
+    else{
+        editname=true;
+        edtctx.fillStyle = "hsl(0,0%,40%)";
+        edtctx.strokeStyle = "hsl(0,0%,0%)";
+        edtctx.fillRect(0,0,edtwidth,edtheight);
+        edtctx.lineWidth = 10;
+        edtctx.beginPath();
+        edtctx.rect(20,edtheight/2-25,edtwidth-40,50);0
+        edtctx.moveTo(70,edtheight/2+10);
+        edtctx.lineTo(70,edtheight/2-10);
+        edtctx.stroke();
+        edtctx.lineWidth = 5;
+        edtctx.moveTo(85,edtheight/2-10);
+        edtctx.lineTo(55,edtheight/2-10);
+        edtctx.stroke();
+        edtctx.fillRect(100,0,50,edtheight);
+        edtctx.strokeStyle = "white";
+        edtctx.beginPath();
+        edtctx.moveTo(140,30);
+        edtctx.lineTo(110,30);
+        edtctx.moveTo(140,edtheight-30);
+        edtctx.lineTo(110,edtheight-30);
+        edtctx.moveTo(125,30);
+        edtctx.lineTo(125,edtheight-30);
+        edtctx.stroke();
+
+
+
+
+    }
+}
+
+
+const modMenuBox = document.createElement("div");
+menuHeadBox.appendChild(modMenuBox);
+modMenuBox.style.background = "hsl(0,0%,60%)";
+modMenuBox.style.padding = "2px";
+modbuttonCanvas = document.createElement("canvas");
+modbuttonCanvas.style.width = "31px";
+modbuttonCanvas.style.height = "31px";
+modwidth = modbuttonCanvas.width;
+modheight = modbuttonCanvas.height;
+const modctx = modbuttonCanvas.getContext("2d");
+modMenuBox.appendChild(modbuttonCanvas);
+
+
+
+modMenuBox.style.gridArea ="1/2/2/3";
+modMenuBox.style.cursor = "pointer";
+
+
+modctx.fillStyle ="hsl(0,0%,40%)";
+modctx.fillRect(0,0,modwidth,modheight);
+modctx.translate(modwidth/2,modheight/2);
+modctx.fillStyle ="hsl(0,0%,0%)";
+modctx.ellipse(0,0,100,50,0,0,tau);
+modctx.rect(-40,0,80,modheight/2);
+modctx.fill();
+modctx.fillStyle ="hsl(0,0%,40%)";
+modctx.fillRect(-70,10,140,-modheight/2);
+modctx.beginPath();
+modctx.moveTo(-80,10);
+modctx.lineTo(0,30);
+modctx.lineTo(80,10);
+modctx.fill();
+
+modctx.fillStyle ="hsl(0,0%,100%)";
+modctx.translate(0,-20);
+boltS = 30;
+modctx.beginPath();
+modctx.moveTo(boltS,0);
+for(i=0;i<=6;i++){
+    modctx.lineTo(Math.sin((tau/6)*i)*boltS*2,Math.cos((tau/6)*i)*boltS);
+}
+modctx.fill();
+
+
+
 const CreateMenuBox = document.createElement("div");
 menuHeadBox.appendChild(CreateMenuBox);
 CreateMenuBox.style.background = "hsl(0,0%,60%)";
 CreateMenuBox.style.padding = "2px";
 CreatebuttonCanvas = document.createElement("canvas");
-CreatebuttonCanvas.style.width = "100%";
-CreatebuttonCanvas.style.height = "100%";
+CreatebuttonCanvas.style.width = "31px";
+CreatebuttonCanvas.style.height = "31px";
 Crtwidth = CreatebuttonCanvas.width;
 Crtheight = CreatebuttonCanvas.height;
 const Crtctx = CreatebuttonCanvas.getContext("2d");
@@ -424,6 +572,7 @@ AddMenuBox.style.border = "1px solid black";
 AddMenuBox.style.textAlign="center";
 AddMenuBox.style.overflow = "scroll";
 AddMenuBox.style.maxHeight = "100px";
+AddMenuBox.style.cursor = "pointer";
 
 
 
@@ -449,6 +598,7 @@ class AddMenuitem{
     }
     itemclicked(a){
         console.log(a);
+        Addclicked();
     }
     overitem(a){
         a.style.background = "red";
@@ -468,7 +618,31 @@ addline = new AddMenuitem("Line");
 addline.init();
 addcircle = new AddMenuitem("Circle");
 addcircle.init();
+addPencil = new AddMenuitem("Pencil");
+addPencil.init();
 
+
+
+
+
+
+
+const nameBox = document.createElement("div");
+menuHeadBox.appendChild(nameBox);
+nameBox.style.background = "hsl(0,0%,60%)";
+nameBox.style.padding = "2px";
+nameBox.style.gridArea ="1/3/2/4";
+nameBox.style.cursor = "pointer";
+nametag = document.createElement("div");
+nameBox.appendChild(nametag);
+nametag.style.background = "hsl(0,0%,40%)";
+nametag.style.width = "100%";
+nametag.style.height = "100%";
+nametag.style.color = "white";
+nametag.style.textAlign = "center";
+nametag.style.paddingTop = "5px";
+nametag.innerHTML = "BackGround";
+nametag.style.userSelect = "none";
 
 
 
@@ -515,6 +689,7 @@ class Slider{
         this.valuebox = document.createElement("div");
         this.namebox = document.createElement("div");
         this.namebox.innerHTML = this.name;
+        this.namebox.style.userSelect = "none";
         this.inputslider = document.createElement("input");
         this.inputslider.type = "range";
         this.inputslider.min = this.min;
