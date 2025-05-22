@@ -1,5 +1,7 @@
 //Canvas Creation
 let layers = ["BackGround"];
+let maxlayers = 5;
+let numberBox = 0;
 let choice = [2,2,2,3,4,4,4,4,5,5];
 let number = 0;
 let gap = 0;
@@ -17,6 +19,13 @@ let dropdownWidth = 0;
 let dropdownTop = "";
 let dropdownRight = "";
 let outerboxGridSize = 0;
+let mvx = 0;
+let mvy = 0;
+let mcx = 0;
+let mcy = 0;
+let clickcounter = 0;
+let drawcompleted = true;
+let drawing = "";
 let menuanimin = "slidein";
 let menuanimout = "Vslideup";
 let slideinAnim = '@keyframes slidein{ 0%{transform: translateX(400px);} 100%{transform: translateX(0);}}';
@@ -59,6 +68,34 @@ function Screenorientation(){
     console.log(Iorien, Forien);
 }
 
+class Vector{
+    constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+
+    add(vector) {
+        this.x += vector.x;
+        this.y += vector.y;
+    }
+
+    subtract(vector) {
+        this.x -= vector.x;
+        this.y -= vector.y;
+    }
+
+    multiply(scalar) {
+        this.x *= scalar;
+        this.y *= scalar;
+    }
+
+    divide(scalar) {
+        if (scalar != 0) {
+            this.x /= scalar;
+            this.y /= scalar;
+        }
+    }
+}
 function change(){
     if(Iorien=="v"){
         controlsWidth = 70;
@@ -94,6 +131,8 @@ function change(){
         layerMenuBox.style.left ="";
         layerMenuBox.style.right = nameBox.offsetLeft+"px";
         layerMenuBox.style.width = nameBox.offsetWidth + "px";
+        infoBox.style.margin = "0px";
+        infoBox.style.maxWidth = ""; 
     }
     else{
         controlsWidth = 70;
@@ -129,6 +168,7 @@ function change(){
         layerMenuBox.style.left ="";
         layerMenuBox.style.right = nameBox.offsetLeft+"px";
         layerMenuBox.style.width = nameBox.offsetWidth + "px";
+        infoBox.style.margin = "0px 400px";
 
     }
 }
@@ -138,7 +178,7 @@ function change(){
 window.onresize = Screenorientation;
 
 //Make Canvas Background COlour to black
-canvas.style.backgroundColor = "Black"; // Set the background color to black
+canvas.style.backgroundColor = "black"; // Set the background color to black
 canvas.style.display = "inline";
 canvas.style.position = "absolute";
 //Remove the default Margin of the body
@@ -367,7 +407,8 @@ function animatehb(){
 }
 
 
-hideMenuBox.onclick = function() {
+hideMenuBox.addEventListener("click",hideMenu);
+function hideMenu() {
     // Unhide the button
     dropDown.style.animation = menuanimout+" 1s cubic-bezier(.18,.89,.32,1.28) 0s 1 normal both";
     controls.style.display = 'block';
@@ -598,7 +639,7 @@ AddMenuBox.style.color="rgba(255,255,255,1)";
 AddMenuBox.style.background = "white";
 AddMenuBox.style.border = "1px solid black";
 AddMenuBox.style.textAlign="center";
-AddMenuBox.style.overflow = "scroll";
+AddMenuBox.style.overflowY = "scroll";
 AddMenuBox.style.maxHeight = "100px";
 AddMenuBox.style.cursor = "pointer";
 
@@ -625,7 +666,10 @@ class AddMenuitem{
         this.item.addEventListener("mouseleave",()=>this.outitem(this.item));
     }
     itemclicked(a){
-        console.log(a);
+        clickcounter=0;
+        drawing=a;
+        drawcompleted=false;
+        draw(a);
         Addclicked();
     }
     overitem(a){
@@ -684,7 +728,7 @@ modifierMenuBox.style.color="rgba(255,255,255,1)";
 modifierMenuBox.style.background = "white";
 modifierMenuBox.style.border = "1px solid black";
 modifierMenuBox.style.textAlign="center";
-modifierMenuBox.style.overflow = "scroll";
+modifierMenuBox.style.overflowY = "scroll";
 modifierMenuBox.style.maxHeight = "100px";
 modifierMenuBox.style.cursor = "pointer";
 
@@ -771,7 +815,7 @@ layerMenuBox.style.color="rgba(255,255,255,1)";
 layerMenuBox.style.background = "white";
 layerMenuBox.style.border = "1px solid black";
 layerMenuBox.style.textAlign="center";
-layerMenuBox.style.overflow = "scroll";
+layerMenuBox.style.overflowY = "scroll";
 layerMenuBox.style.maxHeight = "100px";
 layerMenuBox.style.cursor = "pointer";
 
@@ -782,8 +826,10 @@ layerMenuBox.style.cursor = "pointer";
 class layer{
     constructor(name = "okay"){
         this.Name = name;
+        this.data = [];
     }
     init(){
+        this.zindex = maxlayers - layers.length;
         this.item = document.createElement("div");
         this.item.className = "add";
         this.item.innerHTML = this.Name;
@@ -794,9 +840,25 @@ class layer{
         layerMenuBox.appendChild(this.item);
 
 
+        this.canvas = document.createElement("canvas");
+        this.ctx = this.canvas.getContext("2d");
+        document.body.appendChild(this.canvas);
+        this.canvas.height = window.innerHeight;
+        this.canvas.width = window.innerWidth;
+        this.canvas.style.backgroundColor = this.bgColor;
+        this.canvas.style.display = "inline";
+        this.canvas.style.position = "absolute";
+        this.canvas.style.top = 0;
+        this.canvas.style.left = 0;
+        setZindex(this.zindex);
+
+
         this.item.addEventListener("click",()=>this.itemclicked(this.Name));
         this.item.addEventListener("mouseenter",()=>this.overitem(this.item));
         this.item.addEventListener("mouseleave",()=>this.outitem(this.item));
+    }
+    setZindex(a){
+        this.canvas.style.zIndex = a;
     }
     itemclicked(a){
         console.log(a);
@@ -807,6 +869,48 @@ class layer{
     }
     outitem(a){
         a.style.background = "grey";
+    }
+    adddata(a){
+        this.index = this.data.length;
+        this.data[this.index] = a;
+    }
+    draw(){
+        this.ctx.setTransform(1,0,0,1,1,1);
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas);
+        this.ctx.translate(this.data[0].x,this.data[0].y);
+        this.ctx.rotate(this.data[1]);
+        for(var i=2;i<this.data.length;i++){
+            if(this.data[i]=="f"){
+                this.ctx.fill();
+            }
+            else if(this.data[i]=="s"){
+                this.ctx.stroke();
+            }
+            else if(this.data[i]=="b"){
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.data[i+1].x,this.data[i+1].y);
+            }
+            else{
+                this.ctx.lineTo(this.data[i].x , this.data[i].y);
+            }
+        }
+    }
+    pivot(){
+        this.data[0].x = pivot// change with pivot slider value
+        this.data[0].y = pivot// change with pivot slider value
+        for (let i = 2; i < this.data.length; i++) {
+            if(this.data[i]!="f"&&this.data!="s"&&this.data!="b"){
+                this.data[i].x -= pivot// change with pivot slider value
+                this.data[i].y -= pivot// change with pivot slider value
+            }
+            
+        }
+    }
+    rotate(){
+        this.data[1] = rotate// change with pivot slider value
+    }
+    translate(){
+        
     }
     menu(){
         return this.item;
@@ -831,7 +935,7 @@ bhas = new layer("test");
 bhas.init();
 ///////////////////////////////////////////////////////////////////////////////
 
-
+/*
 ctx.translate(canvas.width/2, canvas.height/2);
 ctx.beginPath();
 ctx.rect(-50,-50,100,100);
@@ -844,6 +948,30 @@ for (var i=0; i<t; i++) {
 ctx.clip();
 ctx.fillStyle = color;
 ctx.fillRect(-canvas.width/2, -canvas.height/2,canvas.width, canvas.height);
+*/
+
+//////////////////////////////////////////////////////////////////////////////
+////////info box/////////////
+
+const infoBox = document.createElement("div");
+document.body.appendChild(infoBox);
+infoBox.innerHTML = "For Menu click on the BUTTON";
+infoBox.style.padding = "10px 0px";
+infoBox.style.position = "absolute";
+infoBox.style.top = "0";
+infoBox.style.borderRadius = "0px 0px 15px 15px";
+infoBox.style.left = "0";
+infoBox.style.right="0";
+infoBox.style.textAlign = "center";
+infoBox.style.userSelect = "none";
+
+infoBox.style.background = "hsla(0,0%,100%,0.4)";
+infoBox.style.color = "white";
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1031,4 +1159,137 @@ b.init();
 c = new Slider("Working", dropDownul,50,45,23,2,-1000,1000,500);
 c.init();
 
+function infoupdate(text){
+    infoBox.innerHTML = text;
+}
+canvas.addEventListener("mousemove", (e)=>mousemove(e));
+canvas.addEventListener("click", (e)=>mouseclick(e));
+function mousemove(e){
+    mvx = e.clientX;
+    mvy = e.clientY;
+    infoupdate(mvx+", "+mvy+" :  "+mcx+", "+mcy+" : "+clickcounter);
+    if(!drawcompleted&&clickcounter==1){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillRect(mcx,mcy,mvx-mcx,mvy-mcy);
+        
+    }
+}
+function mouseclick(e){
+    mcx = e.clientX;
+    mcy = e.clientY;
+    clickcounter++;
+    if (!drawcompleted){
+        draw(drawing);
+    }
+}
 
+function draw(type){
+    hideMenu();
+    if(type=="Box"){
+        if(clickcounter == 0){
+            infoupdate("click");
+        }
+        else if(clickcounter == 1){
+            boxSX1 = mcx;
+            boxSY1 = mcy;
+            console.log(boxSX1,boxSY1);
+            ctx.fillStyle = "red";
+            ctx.setTransform(1,0,0,1,1,1);
+        }
+        else if(clickcounter == 2){
+            layerindex = layers.length;
+            numberBox++;
+            layers[layerindex] = new shape(type,layername="box",);
+            layers[layerindex].posX = boxSX1;
+            layers[layerindex].posY = boxSY1;
+            layers[layerindex].sizeX = mcx-boxSX1;
+            layers[layerindex].sizeY = mcy-boxSY1;
+            
+            layers[layerindex].init();
+            layers[layerindex].layer.item.innerHTML = "Box_"+numberBox;
+            layers[layerindex].draw();
+            drawcompleted =true;
+        }
+    }
+
+            
+}
+
+class shape{
+    constructor(type,layeref="notset", posX=0, posY=0,rotation=0,sizeX=0, sizeY=0, radius1=0, radius2=0, InAngle=0, OutAngle = 0,pivotX=0,pivotY=0, fgColor="grey",bgColor="rgba(0,0,0,0)",lineColor="black",thickness=4,layername="test",index=0,fill=true,stroke=true){
+        this.type = type;
+        this.posX = posX;
+        this.posY = posY;
+        this.rotation = rotation;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.radius1 = radius1;
+        this.radius2 = radius2;
+        this.IAngle = InAngle;
+        this.OAngle = OutAngle;
+        this.pivotX = pivotX;
+        this.pivotY = pivotY;
+        this.fgColor = fgColor;
+        this.bgColor = bgColor;
+        this.linecolor = lineColor;
+        this.thickness = thickness;
+        this.data = [];
+        this.name = layername;
+        this.layer = layeref == "notset"?new layer(this.name):layeref;
+        this.index = index;
+        this.fill = fill;
+        this.stroke = stroke;
+    }
+    init(){
+        console.log("here");
+        this.canvas = document.createElement("canvas");
+        this.ctx = this.canvas.getContext("2d");
+        document.body.appendChild(this.canvas);
+        this.canvas.height = window.innerHeight;
+        this.canvas.width = window.innerWidth;
+        this.canvas.style.backgroundColor = this.bgColor;
+        this.canvas.style.display = "inline";
+        this.canvas.style.position = "absolute";
+        this.canvas.style.top = 0;
+        this.canvas.style.left = 0;
+        this.pivotX = this.posX;
+        this.pivotY = this.posY;
+        if(this.layeref=="notset"){
+
+        }
+        this.layer.init();
+        this.datainit();
+    }
+    draw(){
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        this.ctx.setTransform(1,0,0,1,1,1);
+        this.ctx.translate(this.data[0], this.data[1]);
+        this.ctx.rotate(this.rotation);
+        if(this.type == "Box"){
+            this.ctx.rect(this.data[2],this.data[3],this.data[4],this.data[5]);
+        }
+        else if(this.type == "Arc"){
+            this.ctx.arc(this.data[2],this.data[3],this.data[4],this.data[5],this.data[6]);
+        }
+        if(this.stroke){
+            this.ctx.strokeStyle = this.linecolor;
+            this.ctx.stroke();
+        }
+        if(this.fill){
+            this.ctx.fillStyle = this.fgColor;
+            this.ctx.fill();
+        }
+    }
+    datainit(){
+        switch(this.type){
+            case "Box":
+                this.data[0] = this.pivotX;
+                this.data[1] = this.pivotY;
+                this.data[2] = this.posX-this.pivotX;
+                this.data[3] = this.posY-this.pivotY;
+                this.data[4] = this.sizeX-(this.posX-this.pivotX);
+                this.data[5] = this.sizeY-(this.posY-this.pivotY);
+                break;
+        }    
+    }
+}

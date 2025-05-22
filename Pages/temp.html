@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="500" height="500" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<button id="circle">Circle</button>
+<button id="box">Box</button>
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+var shape = '';
+var circle = { x: 0, y: 0, radius: 0, clicks: 0 };
+
+document.getElementById('circle').addEventListener('click', function() {
+    shape = 'circle';
+    circle.clicks = 0;
+});
+
+document.getElementById('box').addEventListener('click', function() {
+    shape = 'box';
+});
+
+canvas.addEventListener('click', function(event) {
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+
+    switch(shape) {
+        case 'circle':
+            if(circle.clicks == 0) {
+                circle.x = x;
+                circle.y = y;
+                circle.clicks++;
+            } else {
+                circle.radius = Math.sqrt(Math.pow(x - circle.x, 2) + Math.pow(y - circle.y, 2));
+                ctx.beginPath();
+                ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+            break;
+        case 'box':
+            ctx.fillRect(x, y, 100, 100);
+            break;
+    }
+});
+</script>
+
+</body>
+</html>
